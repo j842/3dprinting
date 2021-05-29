@@ -92,9 +92,9 @@ stab=translate(tempoffset,0,0)*stab
 emit(stab)
 
 -- light mount
-lmthick=5
+lmthick=6
 backthick=2
-gapthick=1.5
+gapthick=2
 lml=37
 edget=3
 edgetsmall=1
