@@ -73,14 +73,21 @@ barmount=difference(barmount,
 --barmount=translate(barr+ringthick+mountl2+slotl,0,0)*barmount
 barmount=translate(barr+ringthick+mountl2,0,0)*barmount
 
+
+-- add letters (40mm high, 10mm deep). Manually placed.
+j=load('../letters/letter_j.stl')
+e=load('../letters/letter_e.stl')
+logo=scale(0.3)*mirror(v(1,0,0))*rotate(90,0,0)*union(j,translate(15,0,0)*e)
+logo=rotate(0,90,0)*logo
+logo=translate(31,15,5.5)*logo
+
+barmount=union(barmount,logo)
+
 emit(barmount)
 
 -------------------------------------------------------
 ------------ PART 2 - light holder --------------------
 -------------------------------------------------------
-
-tempoffset=slotl/2
-tempoffset=-slotl/2-1
 
 -- tab
 stab=cube(slotl,slotw-gap,height)
@@ -88,8 +95,6 @@ ziphol1=translate(0,0,0.25*height-0.5*ziph)*cube(zipl,slotw,ziph)
 ziphol2=translate(0,0,0.75*height-0.5*ziph)*cube(zipl,slotw,ziph)
 stab=difference(stab,ziphol1)
 stab=difference(stab,ziphol2)
-stab=translate(tempoffset,0,0)*stab
-emit(stab)
 
 -- light mount
 lmthick=6
@@ -100,7 +105,6 @@ edget=3
 edgetsmall=1
 slmount=cube(lmthick,lml,height)
 slmount=translate(-lmthick*0.5,0,0)*slmount
---slmount=translate(-lmthick*0.5,-lml*0.5,0)*slmount
 
 -- cut out main recess
 cutoutl1=lmthick-backthick
@@ -145,7 +149,7 @@ slmount=difference(slmount,
 )
 
 -- add the little bump to lock in place
-bumpdown=25
+bumpdown=27
 slmount=union(slmount,
   translate(-0.5 -backthick,-0.5*lml+bumpdown,(height-4)/2)*
   cube(1,1,4)
@@ -154,14 +158,16 @@ slmount=union(slmount,
 
 -- adjust plate to attach, and off-center to look nice
 yadjust=5
-slmount=translate(-slotl+lmthick+tempoffset,yadjust,0)*slmount
-emit(slmount)
+slmount=translate(-slotl/2,yadjust,0)*slmount
 
--- add letters (40mm high, 10mm deep). Manually placed.
-j=load('../letters/letter_j.stl')
-e=load('../letters/letter_e.stl')
-logo=scale(0.3)*mirror(v(1,0,0))*rotate(90,0,0)*union(j,translate(15,0,0)*e)
-logo=rotate(0,90,0)*logo
-logo=translate(31,15,5.5)*logo
-emit(logo)
+tempoffset=slotl
+tempoffset=-1
+
+xoff=-slotl/2+tempoffset
+
+lightmount=translate(xoff,0,0)*union(slmount,stab)
+
+emit(lightmount)
+
+
 
