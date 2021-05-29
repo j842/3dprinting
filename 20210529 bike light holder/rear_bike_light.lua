@@ -16,8 +16,8 @@ mountoverlap=0.5*ringthick
 
 ringedgex=barr+ringthick
 
-zipl=2
-ziph=4
+zipl=4
+ziph=2
 
 gap=1
 
@@ -29,30 +29,26 @@ sring=difference(
 )
 
 
--- tab with zip mount, custom length
-function zipmount(ll,zipoffset)
-local mountltot=ll+mountoverlap
-local smount = translate(ringedgex+0.5*mountltot-mountoverlap,0,0) *
-             cube(mountltot,mountw,height)
+function zipmount2(xl,xr,xzip,ythick)
+local smount=translate(xl+0.5*(xr-xl),0,0)*cube(xr-xl,ythick,height)
+local ziphole1=translate(xzip,0,0.25*height-0.5*ziph)*cube(zipl,ythick,ziph)
+local ziphole2=translate(xzip,0,0.75*height-0.5*ziph)*cube(zipl,ythick,ziph)
 
-local zipslotdx=-0.5*zipl + ringedgex + ll - zipoffset
-local szipslot = translate(zipslotdx,
-              0,0.5*height-0.5*ziph) *
-            cube(zipl,mountw,ziph)
+smount=difference(smount,ziphole1)
+smount=difference(smount,ziphole2)
 
-return difference(
-  smount,
-  szipslot
-)
+return smount
 end
 
 
-
 -- mounts
-smount=zipmount(mountl1,mountl1/2)
+--smount=zipmount(mountl1,mountl1/2)
+smount=zipmount2(ringedgex-mountoverlap,ringedgex+mountl1,ringedgex+0.5*zipl,mountw)
 
-smount2 = mirror(v(1,0,0))*zipmount(mountl2,slotl/2)
-sslot=translate(-0.5*slotl-ringedgex-mountl2+slotl,0,0)*
+smount2=zipmount2(-ringedgex-mountl2,-ringedgex+mountoverlap,
+                  -ringedgex-mountl2+0.5*slotl,mountw)
+--smount2 = mirror(v(1,0,0))*zipmount(mountl2,slotl/2)
+sslot=translate(0.5*slotl-ringedgex-mountl2,0,0)*
          cube(slotl,slotw,height)
 smount2=difference(smount2,sslot)
 
@@ -78,8 +74,12 @@ tempoffset=-slotl/2-1
 
 -- tab
 stab=cube(slotl,slotw,height)
-szipslot3=translate(0.5*zipl,0,0.5*height-0.5*ziph)*
+szipslot3=translate(0.5*zipl,0,0.25*height-0.5*ziph)*
   cube(zipl,slotw,ziph)
+szipslot3=union(szipslot3,
+translate(0.5*zipl,0,0.75*height-0.5*ziph)*
+  cube(zipl,slotw,ziph))
+
 stab=difference(stab,szipslot3)
 stab=translate(tempoffset,0,0)*stab
 emit(stab)
