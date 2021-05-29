@@ -83,7 +83,7 @@ tempoffset=slotl/2
 tempoffset=-slotl/2-1
 
 -- tab
-stab=cube(slotl,slotw,height)
+stab=cube(slotl,slotw-gap,height)
 ziphol1=translate(0,0,0.25*height-0.5*ziph)*cube(zipl,slotw,ziph)
 ziphol2=translate(0,0,0.75*height-0.5*ziph)*cube(zipl,slotw,ziph)
 stab=difference(stab,ziphol1)
@@ -153,7 +153,7 @@ slmount=union(slmount,
 
 
 -- adjust plate to attach, and off-center to look nice
-yadjust=2
+yadjust=5
 slmount=translate(-slotl+lmthick+tempoffset,yadjust,0)*slmount
 emit(slmount)
 
