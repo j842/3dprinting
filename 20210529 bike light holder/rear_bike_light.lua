@@ -1,25 +1,36 @@
+-- Bike clamp (Tetrarack M2, with Enfitnix Cubelite II)
 -- one unit is 1mm
 
+-- overall height - needs to be 24mm for holder to fit light
 height=24
 
+-- how thick the bar it attaches to is, and how thick to make clamping ring
 barr=19/2
 ringthick=5
 
+-- how far mounts stick out, depth of slot for the two parts to fit together
 mountl1=5
 mountl2=10
 slotl=10
 
+-- width of mounts and slot.
 mountw=15
 slotw=7
 
-mountoverlap=0.5*ringthick
-
-ringedgex=barr+ringthick
-
+-- size of holes for zip ties
 zipl=4
 ziph=2
 
+-- small gap when cutting halves in two
 gap=1
+
+
+-------------------------------------------------------
+------------ PART 1 - clamp        --------------------
+-------------------------------------------------------
+
+mountoverlap=0.5*ringthick
+ringedgex=barr+ringthick
 
 -- ring shape
 
@@ -42,12 +53,11 @@ end
 
 
 -- mounts
---smount=zipmount(mountl1,mountl1/2)
 smount=zipmount2(ringedgex-mountoverlap,ringedgex+mountl1,ringedgex+0.5*zipl,mountw)
 
 smount2=zipmount2(-ringedgex-mountl2,-ringedgex+mountoverlap,
                   -ringedgex-mountl2+0.5*slotl,mountw)
---smount2 = mirror(v(1,0,0))*zipmount(mountl2,slotl/2)
+
 sslot=translate(0.5*slotl-ringedgex-mountl2,0,0)*
          cube(slotl,slotw,height)
 smount2=difference(smount2,sslot)
@@ -69,18 +79,15 @@ emit(barmount)
 ------------ PART 2 - light holder --------------------
 -------------------------------------------------------
 
---tempoffset=slotl/2
+tempoffset=slotl/2
 tempoffset=-slotl/2-1
 
 -- tab
 stab=cube(slotl,slotw,height)
-szipslot3=translate(0.5*zipl,0,0.25*height-0.5*ziph)*
-  cube(zipl,slotw,ziph)
-szipslot3=union(szipslot3,
-translate(0.5*zipl,0,0.75*height-0.5*ziph)*
-  cube(zipl,slotw,ziph))
-
-stab=difference(stab,szipslot3)
+ziphol1=translate(0,0,0.25*height-0.5*ziph)*cube(zipl,slotw,ziph)
+ziphol2=translate(0,0,0.75*height-0.5*ziph)*cube(zipl,slotw,ziph)
+stab=difference(stab,ziphol1)
+stab=difference(stab,ziphol2)
 stab=translate(tempoffset,0,0)*stab
 emit(stab)
 
@@ -145,13 +152,16 @@ slmount=union(slmount,
 )
 
 
-
-
--- adjust off-center so it fits solidly on the mount tab (full overlap)
-yadjust=0
-slmount=translate(-slotl+tempoffset+lmthick,yadjust,0)*slmount
+-- adjust plate to attach, and off-center to look nice
+yadjust=2
+slmount=translate(-slotl+lmthick+tempoffset,yadjust,0)*slmount
 emit(slmount)
 
-
-
+-- add letters (40mm high, 10mm deep). Manually placed.
+j=load('../letters/letter_j.stl')
+e=load('../letters/letter_e.stl')
+logo=scale(0.3)*mirror(v(1,0,0))*rotate(90,0,0)*union(j,translate(15,0,0)*e)
+logo=rotate(0,90,0)*logo
+logo=translate(31,15,5.5)*logo
+emit(logo)
 
