@@ -82,7 +82,7 @@ barmount=union(barmount,logo)
 lmthick=6
 backthick=2
 gapthick=2
-lml=37
+lml=29
 edget=3
 edgetsmall=1
 slmount=cube(lmthick,lml,height)
@@ -108,25 +108,16 @@ slmount=difference(slmount,
 
 -- create push tab
 lmtabh=9
-lmtabl=8
-slmount=difference(slmount,
-  translate(-0.5*lmthick,0.5*(lml-lmtabl),0)*
-  cube(lmthick,lmtabl,0.5*(height-lmtabh))
-)
-slmount=difference(slmount,
-  translate(-0.5*lmthick,0.5*(lml-lmtabl),height-0.5*(height-lmtabh))*
-  cube(lmthick,lmtabl,0.5*(height-lmtabh))
-)
 
 -- add cutouts so push tab can flex
-tabcutl=20
+tabcutl=10
 tabcuth=1
 slmount=difference(slmount,
-  translate(-0.5*lmthick,0.5*(lml-lmtabl),0.5*(height+lmtabh)-0.5*tabcuth)*
+  translate(-0.5*lmthick,0.5*(lml),0.5*(height+lmtabh)-0.5*tabcuth)*
   cube(lmthick,tabcutl,tabcuth)
 )
 slmount=difference(slmount,
-  translate(-0.5*lmthick,0.5*(lml-lmtabl),0.5*(height-lmtabh)-0.5*tabcuth)*
+  translate(-0.5*lmthick,0.5*(lml),0.5*(height-lmtabh)-0.5*tabcuth)*
   cube(lmthick,tabcutl,tabcuth)
 )
 
@@ -138,7 +129,7 @@ slmount=union(slmount,
 )
 
 -- adjust plate to attach, and off-center to look nice
-yadjust=5
+yadjust=0
 slmount=translate(0,yadjust,0)*slmount
 
 mount=union(barmount,slmount)
@@ -151,17 +142,16 @@ mount=union(barmount,slmount)
 -- split it
 ymax=ringedgex+10
 halfcube=translate(25,-.5*ymax,0)*cube(50,ymax,height)
-halfcube=difference(halfcube,
-translate(mountl2/2,-1.5*mountw/4,0)*cube(mountl2,mountw/4,height))
+-- extend top piece down into bottom piece for lock
 halfcube=union(halfcube,
-translate(mountl2/2,0.5*mountw/4,0)*cube(mountl2,mountw/4,height))
-
---emit(halfcube)
+translate(mountl2/2,0.5*mountw/6,0)*cube(mountl2,mountw/6,height))
 
 mounttop=intersection(mount,halfcube)
 mountbot=difference(mount,halfcube)
 
-mounttop=translate(3,-14,0)*mounttop
+-- move for printing
+mounttop=translate(2,-6,0)*mounttop
 
+-- emit the two halves
 emit(mounttop)
 emit(mountbot)
