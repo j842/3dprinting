@@ -1,8 +1,47 @@
 
+-------------------------------------------------------
+------------ Functions             --------------------
+-------------------------------------------------------
 
 ----------------------------------------------------
+----------------------------------------------------
+
+-- rotate v1 to v2
+function rotvec(v1,v2)
+  local rvec=cross(v1,v2)
+  -- if v1 and v2 parallel, get any perpendicular vector.
+  if (length(rvec)==0) then 
+    rvec=cross(v1,normalize(v(1,2,5)))
+  end
+  return rvec
+end
+
+-- rotate v1 to v2
+function rotangle(v1,v2)
+  local angle = math.acos( dot(v1,v2) )*180/3.141592654 
+  local vc = rotvec(v1,v2)
+  local vrot=rotate(angle,vc)*v1
+  local vrot2=rotate(angle+180,vc)*v1
+  if (length(vrot-v2)>length(vrot2-v2)) then
+    angle=angle+180
+  end
+  return angle
+end
+
+-- get rotation matrix to rotate v1 to v2
+function rotationmatrix(v1,v2)
+   local v1n=normalize(v1)
+   local v2n=normalize(v2)
+   local rv = rotvec(v1n,v2n)
+   local ra = rotangle(v1n,v2n)
+
+   return rotate(ra,rv)
+end
+
+
 -- create m4 recess. nyloc=true for nyloc nut.
-function m4(vstart,vend,boltlength,isnyloc,swapends)
+-- head at vstart, nut at vend
+function m4(vstart,vend,boltlength,isnyloc)
 local headr=7/2
 local headdepth=2.5
 local shaftr=4/2
@@ -27,15 +66,9 @@ nuthole=translate(0,0,holelength-ndepth)*nuthole
 
 local assembly=union(b,nuthole)
 
--- vend at 0,0,0 currently, direction is -1.
+-- vstart at 0,0,0 currently, direction is -1.
 avec=v(0,0,1)
-local vnorm=normalize(vend-vstart)
-local vc = cross(vnorm,avec)
-local angle = -math.asin( length(vc))*180/3.141592654
-if (swapends) then
-    assembly=translate(0,0,holelength)*rotate(180,v(0,1,0))*assembly
-end
-assembly=rotate(angle,vc)*assembly
+assembly=rotationmatrix(avec,vend-vstart)*assembly
 
 assembly=translate(vstart)*assembly
 return assembly
@@ -45,5 +78,5 @@ end
 
 -- MAIN --
 
-s1 = m4(v(0,0,0),v(20,0,0),20,false,false)
+s1 = m4(v(0,0,0),v(0,0,25),20,false)
 emit(s1)
