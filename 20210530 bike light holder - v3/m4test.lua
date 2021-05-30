@@ -38,6 +38,16 @@ function rotationmatrix(v1,v2)
    return rotate(ra,rv)
 end
 
+function nutshape(ndepth)
+-- nyloc nuts were very tight at 4mm radius, cracking the plastic, so add a little (+0.15mm)
+local r=4.15
+local rx=r/2
+local ry=0.866025*r
+local nut={ v{r,0,0},v{rx,ry,0},v{-rx,ry,0},v{-r,0,0},v{-rx,-ry,0},v{rx,-ry,0}}
+local nuthole=linear_extrude(v(0,0,ndepth),nut)
+return nuthole
+end
+
 
 -- create m4 recess. nyloc=true for nyloc nut.
 -- head at vstart, nut at vend
@@ -56,17 +66,13 @@ local h=cylinder(headr,headdepth)
 local b=union(s,h)
 
 local ndepth=3
-if (isnyloc) then
-  ndepth=4.5
-end
-local rt=math.sqrt(12)
-local nut={ v{4,0,0},v{2,rt,0},v{-2,rt,0},v{-4,0,0},v{-2,-rt,0},v{2,-rt,0}}
-local nuthole=linear_extrude(v(0,0,ndepth),nut)
+if (isnyloc) then ndepth=4.5 end
+local nuthole=nutshape(ndepth)
 nuthole=translate(0,0,holelength-ndepth)*nuthole
 
 local assembly=union(b,nuthole)
 
--- vstart at 0,0,0 currently, direction is -1.
+-- vstart at 0,0,0 currently
 avec=v(0,0,1)
 assembly=rotationmatrix(avec,vend-vstart)*assembly
 
