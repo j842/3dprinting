@@ -9,7 +9,7 @@ barr=19/2
 ringthick=5
 
 -- how far mounts stick out, depth of slot for the two parts to fit together
-mountl1=7
+mountl1=9
 mountl2=10
 
 -- width of mounts and slot.
@@ -54,6 +54,16 @@ function rotationmatrix(v1,v2)
    return rotate(ra,rv)
 end
 
+function nutshape(ndepth)
+-- nyloc nuts were very tight at 4mm radius, cracking the plastic, so add a little (+0.15mm)
+local r=4.15
+local rx=r/2
+local ry=0.866025*r
+local nut={ v{r,0,0},v{rx,ry,0},v{-rx,ry,0},v{-r,0,0},v{-rx,-ry,0},v{rx,-ry,0}}
+local nuthole=linear_extrude(v(0,0,ndepth),nut)
+return nuthole
+end
+
 
 -- create m4 recess. nyloc=true for nyloc nut.
 -- head at vstart, nut at vend
@@ -72,12 +82,8 @@ local h=cylinder(headr,headdepth)
 local b=union(s,h)
 
 local ndepth=3
-if (isnyloc) then
-  ndepth=4.5
-end
-local rt=math.sqrt(12)
-local nut={ v{4,0,0},v{2,rt,0},v{-2,rt,0},v{-4,0,0},v{-2,-rt,0},v{2,-rt,0}}
-local nuthole=linear_extrude(v(0,0,ndepth),nut)
+if (isnyloc) then ndepth=4.5 end
+local nuthole=nutshape(ndepth)
 nuthole=translate(0,0,holelength-ndepth)*nuthole
 
 local assembly=union(b,nuthole)
@@ -91,19 +97,19 @@ return assembly
 end
 ----------------------------------------------------
 
--- create full height block from xl to xr, with thickness ythick, and zip tie holes at xzip.
-function zipmount2(xl,xr,xscrewpos,ythick)
-  local smount=translate(xl+0.5*(xr-xl),0,0)*cube(xr-xl,ythick,height)
-  local vec=v(xscrewpos,ythick/2,0.25*height)
+-- create full height block from xl to xr, with thickness ythick, and bolts at xboltpos.
+function addboltedtab(sring, xl,xr,xboltpos,ythick)
+  sring=union(sring, translate(xl+0.5*(xr-xl),0,0)*cube(xr-xl,ythick,height))
 
-  smount=difference(smount,
+  local vec=v(xboltpos,ythick/2,0.25*height)
+  sring=difference(sring,
     m4(v(vec.x,vec.y,vec.z),v(vec.x,-vec.y,vec.z),15,true))
 
   vec.z=0.75*height
-  smount=difference(smount,
+  sring=difference(sring,
     m4(v(vec.x,vec.y,vec.z),v(vec.x,-vec.y,vec.z),15,true))
 
-  return smount
+  return sring
 end
 
 ----------------------------------------------------
@@ -116,12 +122,12 @@ mountoverlap=0.5*ringthick
 ringedgex=barr+ringthick
 
 -- ring shape
-
 sring=difference(
   cylinder(ringedgex,height),
   cylinder(barr,height)
 )
 
+-- add groves to match raised parts of Tetrapack bar (probably not needed)
 sring=difference(
   sring,
   translate(0,0,height/2+17/2)*cylinder(barr+2,1))
@@ -129,14 +135,14 @@ sring=difference(
   sring,
   translate(0,0,height/2-17/2)*cylinder(barr+2,1))
 
--- add in the mounts
--- the -1 x adjustment is because we're away from the peak of the circle
-smount1=zipmount2(ringedgex-mountoverlap,ringedgex+mountl1,ringedgex+mountl1/2-1,mountw)
+-- add in the mounts, passing in the current shape so we cut through everything for bolts
+-- the +/-2 x-adjustment and +5 y-thickness are offsetting for strength
+barmount=addboltedtab(sring,ringedgex-mountoverlap,ringedgex+mountl1,
+                   ringedgex+mountl1/2-2,mountw)
+barmount=addboltedtab(barmount,-ringedgex-mountl2,-ringedgex+mountoverlap+2,
+                  -ringedgex-mountl2/2+2,mountw+5)
 
-smount2=zipmount2(-ringedgex-mountl2,-ringedgex+mountoverlap+2,
-                  -ringedgex-mountl2/2,mountw+5)
-
-barmount=union(union(sring,smount1),smount2)
+--barmount=union(union(sring,smount1),smount2)
 
 -- shift so right edge of tab is at x=0.
 barmount=translate(barr+ringthick+mountl2,0,0)*barmount
