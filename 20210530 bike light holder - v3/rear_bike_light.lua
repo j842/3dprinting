@@ -71,7 +71,7 @@ local headr=7/2
 local headdepth=2.5
 local shaftr=4/2
 local holelength=length(vend-vstart)
-local s=cylinder(shaftr,holelength)
+local s=cylinder(shaftr,math.max(holelength,boltlength+headdepth))
 
 headdepth=math.max(headdepth,holelength-boltlength)
 local h=cylinder(headr,headdepth)
@@ -85,10 +85,9 @@ nuthole=translate(0,0,holelength-ndepth)*nuthole
 
 local assembly=union(b,nuthole)
 
--- vstart at 0,0,0 currently
+-- vstart at 0,0,0 currently. Rotate and position.
 avec=v(0,0,1)
 assembly=rotationmatrix(avec,vend-vstart)*assembly
-
 assembly=translate(vstart)*assembly
 return assembly
 end
@@ -96,15 +95,17 @@ end
 
 -- create full height block from xl to xr, with thickness ythick, and bolts at xboltpos.
 function addboltedtab(sring, xl,xr,xboltpos,ythick)
+  local bolts=15
+
   sring=union(sring, translate(xl+0.5*(xr-xl),0,0)*cube(xr-xl,ythick,height))
 
   local vec=v(xboltpos,ythick/2,0.25*height)
-  sring=difference(sring,
-    m4(v(vec.x,vec.y,vec.z),v(vec.x,-vec.y,vec.z),15,true))
-
+  local b1=m4(v(vec.x,vec.y,vec.z),v(vec.x,-vec.y,vec.z),bolts,true)
   vec.z=0.75*height
-  sring=difference(sring,
-    m4(v(vec.x,vec.y,vec.z),v(vec.x,-vec.y,vec.z),15,true))
+  local b2=m4(v(vec.x,vec.y,vec.z),v(vec.x,-vec.y,vec.z),bolts,true)
+
+  sring=difference(sring,b1)
+  sring=difference(sring,b2)
 
   return sring
 end
@@ -138,6 +139,15 @@ btx1=ringedgex+mountl
 btbp=ringedgex+mountl/2-2
 sring=addboltedtab(sring,btx0,btx1,btbp,thickness)
 sring=addboltedtab(sring,-btx1,-btx0,-btbp,thickness)
+
+tx=10
+ty=10
+olap=2.5
+edgecut=translate(ringedgex+mountl+0.5*tx-olap,thickness/2+0.5*ty-olap,0)*
+      rotate(45,v(0,0,1))*cube(tx,ty,height)
+sring=difference(sring,edgecut)
+--sring=difference(sring,mirror(v(0,0,1))*zzz)
+
 
 -- shift so right edge of tab is at x=0.
 barmount=translate(barr+ringthick+mountl,0,0)*sring
@@ -211,7 +221,6 @@ slmount=translate(0,yadjust,0)*slmount
 
 mount=union(barmount,slmount)
 
-
 -------------------------------------------------------
 ------------ PART 3 - SPLIT FOR PRINTING --------------
 -------------------------------------------------------
@@ -226,9 +235,11 @@ halfcube=translate(xmax/2,-.5*ymax,0)*cube(xmax,ymax,height)
 mountbot=intersection(mount,halfcube)
 mounttop=difference(mount,halfcube)
 
--- move for printing
+-- move bottom for printing
 mountbot=translate(2,-6,0)*mountbot
 
 -- emit the two halves
 emit(mounttop)
 emit(mountbot)
+
+

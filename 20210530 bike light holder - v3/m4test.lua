@@ -56,7 +56,7 @@ local headr=7/2
 local headdepth=2.5
 local shaftr=4/2
 local holelength=length(vend-vstart)
-local s=cylinder(shaftr,holelength)
+local s=cylinder(shaftr,math.max(holelength,boltlength+headdepth))
 
 headdepth=math.max(headdepth,holelength-boltlength)
 local h=cylinder(headr,headdepth)
