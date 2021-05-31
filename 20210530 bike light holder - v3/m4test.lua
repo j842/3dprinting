@@ -58,15 +58,13 @@ local shaftr=4/2
 local holelength=length(vend-vstart)
 local s=cylinder(shaftr,holelength)
 
-if (holelength>boltlength) then
-  headdepth=headdepth+holelength-boltlength
-end
+headdepth=math.max(headdepth,holelength-boltlength)
 local h=cylinder(headr,headdepth)
 
 local b=union(s,h)
 
 local ndepth=3
-if (isnyloc) then ndepth=4.5 end
+if (isnyloc) then ndepth=5 end
 local nuthole=nutshape(ndepth)
 nuthole=translate(0,0,holelength-ndepth)*nuthole
 
