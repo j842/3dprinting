@@ -87,4 +87,24 @@ function jshapes.rotvec(v1,v2)
   end
   ----------------------------------------------------
 
+
+  ----------------------------------------------------
+  -- Ziptie hole. 
+  function jshapes.ziptie(vstart,vend,w,l)
+    local d=length(vend-vstart)
+    ziphole=cube(w,l,d)
+    avec=v(0,0,1)
+    ziphole=jshapes.rotationmatrix(avec,vend-vstart)*ziphole
+    ziphole=translate(vstart)*ziphole
+    return ziphole
+  end
+  -- for standard small zipties.
+  function jshapes.ziptiew(vstart,vend)
+    return jshapes.ziptie(vstart,vend,4,2)
+  end
+  function jshapes.ziptiel(vstart,vend)
+    return jshapes.ziptie(vstart,vend,2,4)
+  end
+  ----------------------------------------------------   
+
 return jshapes

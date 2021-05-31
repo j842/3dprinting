@@ -27,7 +27,7 @@ function addboltedtab(sring, xl,xr,xboltpos,ythick)
   local vec=v(xboltpos,ythick/2,0.25*height)
   local b1=jshapes.m4(v(vec.x,vec.y,vec.z),v(vec.x,-vec.y,vec.z),bolts,true)
   vec.z=0.75*height
-  local b2=m4(v(vec.x,vec.y,vec.z),v(vec.x,-vec.y,vec.z),bolts,true)
+  local b2=jshapes.m4(v(vec.x,vec.y,vec.z),v(vec.x,-vec.y,vec.z),bolts,true)
 
   sring=difference(sring,b1)
   sring=difference(sring,b2)
