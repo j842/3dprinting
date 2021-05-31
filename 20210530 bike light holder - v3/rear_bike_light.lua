@@ -6,14 +6,13 @@ height=24
 
 -- how thick the bar it attaches to is, and how thick to make clamping ring
 barr=19/2
-ringthick=5
+ringthick=5.5
 
 -- how far mounts stick out, depth of slot for the two parts to fit together
-mountl1=9
-mountl2=10
+mountl=10
 
 -- width of mounts and slot.
-mountw=15
+thickness=17.5
 
 -------------------------------------------------------
 ------------ Functions             --------------------
@@ -134,23 +133,21 @@ sring=difference(
   translate(0,0,height/2-17/2)*cylinder(barr+2,1))
 
 -- add in the mounts, passing in the current shape so we cut through everything for bolts
--- the +/-2 x-adjustment and +5 y-thickness are offsetting for strength
-barmount=addboltedtab(sring,ringedgex-mountoverlap,ringedgex+mountl1,
-                   ringedgex+mountl1/2-2,mountw)
-barmount=addboltedtab(barmount,-ringedgex-mountl2,-ringedgex+mountoverlap+2,
-                  -ringedgex-mountl2/2+2,mountw+5)
-
---barmount=union(union(sring,smount1),smount2)
+btx0=ringedgex-mountoverlap
+btx1=ringedgex+mountl
+btbp=ringedgex+mountl/2-2
+sring=addboltedtab(sring,btx0,btx1,btbp,thickness)
+sring=addboltedtab(sring,-btx1,-btx0,-btbp,thickness)
 
 -- shift so right edge of tab is at x=0.
-barmount=translate(barr+ringthick+mountl2,0,0)*barmount
+barmount=translate(barr+ringthick+mountl,0,0)*sring
 
 -- add letters (40mm high, 10mm deep). Manually placed.
 j=load('../letters/letter_j.stl')
 e=load('../letters/letter_e.stl')
 logo=scale(0.3)*mirror(v(1,0,0))*rotate(90,0,0)*union(j,translate(15,0,0)*e)
 logo=rotate(0,90,0)*logo
-logo=translate(31,15,5.5)*logo
+logo=translate(31.5,15.5,5.5)*logo
 
 barmount=union(barmount,logo)
 
@@ -221,7 +218,7 @@ mount=union(barmount,slmount)
 
 -- split it
 ymax=ringedgex+10
-xmax=2*ringedgex+mountl1+mountl2
+xmax=2*(ringedgex+mountl)
 -- halfcube extends from (-xmax,-ymax, 0) to (0, 0, height),
 -- so represents the bottom (smaller) part of the bracket.
 halfcube=translate(xmax/2,-.5*ymax,0)*cube(xmax,ymax,height)
