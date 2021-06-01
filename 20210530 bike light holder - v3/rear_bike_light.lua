@@ -9,9 +9,9 @@ height=25
 
 -- how thick the bar it attaches to is, and how thick to make clamping ring
 barr=19/2
-pad=1
+pad=2.8
 
-ringthick=5.5
+ringthick=7
 
 -- how far mounts stick out, depth of slot for the two parts to fit together
 mountl=10
@@ -22,7 +22,8 @@ thickness=17.5
 
 -- create full height block from xl to xr, with thickness ythick, and bolts at xboltpos.
 function addboltedtab(sring, xl,xr,xboltpos,ythick)
-  local bolts=15
+  -- provide 1mm extension for 15mm bolt in case fit is tight and gap needed.
+  local bolts=15-1
 
   sring=union(sring, translate(xl+0.5*(xr-xl),0,0)*cube(xr-xl,ythick,height))
 
@@ -90,7 +91,7 @@ j=load('../letters/letter_j.stl')
 e=load('../letters/letter_e.stl')
 logo=scale(0.3)*mirror(v(1,0,0))*rotate(90,0,0)*union(j,translate(15,0,0)*e)
 logo=rotate(0,90,0)*logo
-logo=translate(31.5,15.5,5.5)*logo
+logo=translate(32.5,17.5,5.5)*logo
 
 barmount=union(barmount,logo)
 
@@ -135,7 +136,7 @@ slmount=difference(slmount,
 
 -- add cutouts so push tab can flex
 tabw=9
-tabg=1.5
+tabg=0.75
 tabover=2
 slmount=difference(slmount,
   translate(0,backl-tabover,height/2-tabw/2-tabg/2)*
