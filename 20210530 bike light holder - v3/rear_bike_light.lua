@@ -9,7 +9,7 @@ height=25
 
 -- how thick the bar it attaches to is, and how thick to make clamping ring
 barr=19/2
-pad=2
+pad=1
 
 ringthick=5.5
 
