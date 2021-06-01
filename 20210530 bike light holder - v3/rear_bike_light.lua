@@ -5,10 +5,12 @@ package.path = package.path .. ";../common/?.lua"
 jshapes=require("jshapes")
 
 -- overall height - needs to be 24mm for holder to fit light
-height=24
+height=25
 
 -- how thick the bar it attaches to is, and how thick to make clamping ring
 barr=19/2
+pad=2
+
 ringthick=5.5
 
 -- how far mounts stick out, depth of slot for the two parts to fit together
@@ -25,14 +27,19 @@ function addboltedtab(sring, xl,xr,xboltpos,ythick)
   sring=union(sring, translate(xl+0.5*(xr-xl),0,0)*cube(xr-xl,ythick,height))
 
   local vec=v(xboltpos,ythick/2,0.25*height)
-  local b1=jshapes.m4(v(vec.x,vec.y,vec.z),v(vec.x,-vec.y,vec.z),bolts,true)
+  local b1=jshapes.m4rn(v(vec.x,vec.y,vec.z),v(vec.x,-vec.y,vec.z),bolts)
   vec.z=0.75*height
-  local b2=jshapes.m4(v(vec.x,vec.y,vec.z),v(vec.x,-vec.y,vec.z),bolts,true)
+  local b2=jshapes.m4rn(v(vec.x,vec.y,vec.z),v(vec.x,-vec.y,vec.z),bolts)
 
   sring=difference(sring,b1)
   sring=difference(sring,b2)
 
   return sring
+end
+
+function tcube(dx,dy,dz)
+   local tc=translate(0.5*dx,0.5*dy,0)*cube(dx,dy,dz)
+   return tc
 end
 
 ----------------------------------------------------
@@ -47,16 +54,17 @@ ringedgex=barr+ringthick
 -- ring shape
 sring=difference(
   cylinder(ringedgex,height),
-  cylinder(barr,height)
+  cylinder(barr+pad,height)
 )
 
 -- add groves to match raised parts of Tetrapack bar (probably not needed)
+local notchgap=17
 sring=difference(
   sring,
-  translate(0,0,height/2+17/2)*cylinder(barr+2,1))
+  translate(0,0,height/2+notchgap/2)*cylinder(barr+pad+2,1))
 sring=difference(
   sring,
-  translate(0,0,height/2-17/2)*cylinder(barr+2,1))
+  translate(0,0,height/2-notchgap/2)*cylinder(barr+pad+2,1))
 
 -- add in the mounts, passing in the current shape so we cut through everything for bolts
 btx0=ringedgex-mountoverlap
@@ -90,59 +98,62 @@ barmount=union(barmount,logo)
 ------------ PART 2 - light holder --------------------
 -------------------------------------------------------
 
--- light mount, with left edge at x=0
-lmthick=6
+-- light mount, with (0,0,0) being (back,bottom,left) - extending in the +ve direction on all axes
+slotw=20      -- how wide the slot that the light goes in
+slotl=23      -- length of slot
+slotd=2       -- depth of slot
+overhangw=1   -- width of overhang of the ridge holding the light in
+overhangl=1   -- length of overhang
+overhangd=2   -- gap light goes in is 2mm deep
+
+bumpl=24      -- how far is the bump from the back of slot
+
+lml=29--29
 backthick=2
-gapthick=2
-lml=29
-edget=3
-edgetsmall=1
-slmount=cube(lmthick,lml,height)
-slmount=translate(-lmthick*0.5,0,0)*slmount
+
+sidethick=(height-slotw)/2         -- thickness of plastic around the notch (w and l directions)
+backl=slotl+sidethick              -- total length of from start of slot to end of light mount
+lmthick=backthick+slotd+overhangd  -- total thickness
+
+-- main mount cube
+slmount=tcube(lmthick,lml,height)
 
 -- cut out main recess
-cutoutl1=lmthick-backthick
 slmount=difference(slmount,
-  translate(-backthick-0.5*cutoutl1,0.5*edget,edget)*
-  cube(cutoutl1,lml-edget,height-2*edget))
+  translate(backthick,sidethick+overhangl,sidethick+overhangw)*
+  tcube(slotd+overhangd,slotl-overhangl,slotw-2*overhangw))
 
--- cut out small slot the light slides in
+-- cut out thin slot the light slides in
 slmount=difference(slmount,
-  translate(-backthick-0.5*gapthick,0.5*gapthick,gapthick)*
-  cube(gapthick,lml-gapthick,height-2*gapthick))
+  translate(backthick,sidethick,sidethick)*
+  tcube(slotd,slotl,slotw))
 
--- remove more of slot region (so grab area is smaller)
-ridgel=25
+-- remove the part beyond the slot
 slmount=difference(slmount,
-  translate(-backthick-0.5*(lmthick-backthick),0.5*ridgel,0)*
-  cube(lmthick-backthick,lml-ridgel,height)
-)
-
--- create push tab
-lmtabh=9
+  translate(backthick,backl,0)*
+  tcube(slotd+overhangd,lml-backl,height))
 
 -- add cutouts so push tab can flex
-tabcutl=10
-tabcuth=1
+tabw=9
+tabg=1.5
+tabover=2
 slmount=difference(slmount,
-  translate(-0.5*lmthick,0.5*(lml),0.5*(height+lmtabh)-0.5*tabcuth)*
-  cube(lmthick,tabcutl,tabcuth)
-)
+  translate(0,backl-tabover,height/2-tabw/2-tabg/2)*
+  tcube(lmthick,lml-backl+tabover,tabg))
 slmount=difference(slmount,
-  translate(-0.5*lmthick,0.5*(lml),0.5*(height-lmtabh)-0.5*tabcuth)*
-  cube(lmthick,tabcutl,tabcuth)
-)
+  translate(0,backl-tabover,height/2+tabw/2-tabg/2)*
+  tcube(lmthick,lml-backl+tabover,tabg))
+
 
 -- add the little bump to lock in place
-bumpdown=26.5
 slmount=union(slmount,
-  translate(-0.5 -backthick,-0.5*lml+bumpdown,(height-4)/2)*
-  cube(1,1,4)
-)
+  translate(backthick,backl,height/2-2)*
+  tcube(1,1,4))
 
 -- adjust plate to attach, and off-center to look nice
-yadjust=0
+yadjust=-slotl/2
 slmount=translate(0,yadjust,0)*slmount
+slmount=mirror(v(1,0,0))*slmount
 
 mount=union(barmount,slmount)
 

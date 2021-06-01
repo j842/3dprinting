@@ -60,7 +60,7 @@ function jshapes.rotvec(v1,v2)
   ----------------------------------------------------
   -- create m4 recess. nyloc=true for nyloc nut.
   -- screw head at vstart, nut at vend
-  function jshapes.m4(vstart,vend,boltlength,isnyloc)
+  local function _m4r(vstart,vend,boltlength,isnyloc)
   local headr=7/2
   local headdepth=2.5
   local shaftr=4/2
@@ -84,6 +84,14 @@ function jshapes.rotvec(v1,v2)
   assembly=jshapes.rotationmatrix(avec,vend-vstart)*assembly
   assembly=translate(vstart)*assembly
   return assembly
+  end
+
+  function jshapes.m4r(vstart,vend,boltlength)
+    return _m4r(vstart,vend,boltlength,3)
+  end
+
+  function jshapes.m4rn(vstart,vend,boltlength)
+    return _m4r(vstart,vend,boltlength,5)
   end
   ----------------------------------------------------
 
