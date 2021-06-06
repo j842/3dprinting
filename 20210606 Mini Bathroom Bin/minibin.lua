@@ -16,13 +16,20 @@ cr=5
 cgap=0.5
 cw=(hingew-2*cgap)/3
 
-hingebot=translate(0,-d/2-gap,h-lidh-hingeh-cr-cgap)*cube(hingew,hinged,hingeh)
-hinge1=translate(hingew/2-cw/2,-d/2-hinged/2+cr-gap,h-lidh-cr-cgap)*rotate(0,90,0)*ccylinder(cr,cw)
-hinge2=translate(-hingew/2+cw/2,-d/2-hinged/2+cr-gap,h-lidh-cr-cgap)*rotate(0,90,0)*ccylinder(cr,cw)
-hinge3=translate(0,-d/2-hinged/2+cr-gap,h-lidh-cr-cgap)*rotate(0,90,0)*ccylinder(cr,cw)
 
-bhinge3=translate(0,-d/2-hinged/2+cr-gap,h-lidh-cr-cgap)*rotate(0,90,0)*ccylinder(cr+1,cw+1)
+hingetz=h-lidh-cr-cgap
+hingety=-d/2-hinged/2+cr-gap
 
+hingebot=translate(0,-d/2-gap,hingetz-hingeh)*cube(hingew,hinged,hingeh)
+
+function hingecircle(tx,enlarge)
+    return translate(tx,hingety,hingetz)*rotate(0,90,0)*ccylinder(cr+enlarge,cw+enlarge)
+end
+
+hinge1=hingecircle(hingew/2-cw/2,0)
+hinge2=hingecircle(-hingew/2+cw/2,0)
+hinge3=hingecircle(0,0)
+bhinge3=hingecircle(0,1)
 
 hingebot=union(hingebot,hinge1)
 hingebot=union(hingebot,hinge2)
@@ -35,14 +42,25 @@ body=difference(
 body=difference(body,bhinge3)
 
 
-
-lid=difference(
-    cylinder(d/2+t+gap,lidh),
-    cylinder(d/2+gap,lidh-t)
-)
+-- LID
+lid=cylinder(d/2+t+gap,lidh)
 lid=translate(0,0,h-lidh)*lid
 
+hinge3=union(hinge3, 
+   translate(0,-d/2-gap,h-cr-cgap)*ccube(cw,hingew,hingeh)
+)
+hinge3=union(hinge3, 
+   translate(0,-d/2-gap,h-cr-cgap)*ccube(cw,hingew+cw,hingeh)
+)
+
+
 lid=union(lid,hinge3)
+lid=difference(
+    lid,
+    cylinder(d/2+gap,lidh-t)
+)
+
+
 --body=difference(body,lid)
 
 space=5
