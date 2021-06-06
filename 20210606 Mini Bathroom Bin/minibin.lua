@@ -12,7 +12,7 @@ hinged=30
 
 body=cylinder(d/2,h)
 
-cr=5
+cr=8
 cgap=0.5
 cw=(hingew-2*cgap)/3
 
@@ -47,10 +47,10 @@ lid=cylinder(d/2+t+gap,lidh)
 lid=translate(0,0,h-lidh)*lid
 
 hinge3=union(hinge3, 
-   translate(0,-d/2-gap,h-cr-cgap)*ccube(cw,hingew,hingeh)
+   translate(0,-d/2-gap,h-lidh)*cube(cw,hinged,hingeh)
 )
 hinge3=union(hinge3, 
-   translate(0,-d/2-gap,h-cr-cgap)*ccube(cw,hingew+cw,hingeh)
+translate(0,-d/2-gap-(hinged-cr*2)/2,h-lidh-cr)*cube(5,cr*2,cr*2)
 )
 
 
@@ -64,7 +64,7 @@ lid=difference(
 --body=difference(body,lid)
 
 space=5
---lid=translate(d+t+gap+space,0,lidh)*mirror(v(0,0,1))*lid
+lid=translate(d+t+gap+space,0,h)*mirror(v(0,0,1))*lid
 
 emit(body)
 emit(lid)
