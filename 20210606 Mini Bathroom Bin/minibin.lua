@@ -8,11 +8,11 @@ gap=5
 
 hingew=25
 hingeh=10
-hinged=30
+hinged=20
 
 body=cylinder(d/2,h)
 
-cr=8
+cr=5
 cgap=0.5
 cw=(hingew-2*cgap)/3
 
@@ -41,6 +41,11 @@ body=difference(
 )
 body=difference(body,bhinge3)
 
+pinr=2
+pin=translate(0,hingety,hingetz)*rotate(0,90,0)*ccylinder(pinr,hingew)
+
+body=difference(body,pin)
+
 
 -- LID
 lid=cylinder(d/2+t+gap,lidh)
@@ -59,12 +64,13 @@ lid=difference(
     lid,
     cylinder(d/2+gap,lidh-t)
 )
+lid=difference(lid,pin)
 
 
 --body=difference(body,lid)
 
 space=5
-lid=translate(d+t+gap+space,0,h)*mirror(v(0,0,1))*lid
+--lid=translate(d+t+gap+space,0,h)*mirror(v(0,0,1))*lid
 
 emit(body)
 emit(lid)
