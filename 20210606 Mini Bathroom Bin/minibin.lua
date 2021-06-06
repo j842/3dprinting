@@ -3,11 +3,11 @@
 d=100
 h=100
 t=2
-lidh=10
-gap=5
+lidh=5
+gap=2
 
 hingew=25
-hingeh=10
+hingeh=8
 hinged=20
 
 body=cylinder(d/2,h)
@@ -49,25 +49,26 @@ body=difference(body,pin)
 
 -- LID
 lid=cylinder(d/2+t+gap,lidh)
-lid=translate(0,0,h-lidh)*lid
-
-hinge3=union(hinge3, 
-   translate(0,-d/2-gap,h-lidh)*cube(cw,hinged,hingeh)
-)
-hinge3=union(hinge3, 
-translate(0,-d/2-gap-(hinged-cr*2)/2,h-lidh-cr)*cube(5,cr*2,cr*2)
-)
-
-
-lid=union(lid,hinge3)
 lid=difference(
     lid,
     cylinder(d/2+gap,lidh-t)
 )
+lid=translate(0,0,h-lidh)*lid
+
+--hinge3=union(hinge3, 
+--   translate(0,-d/2-gap,h-lidh)*cube(cw,hinged,hingeh)
+--)
+hinge3=union(hinge3, 
+translate(0,-d/2-gap-(hinged-cr*2)/2,h-lidh-cr)*cube(cw,cr*2,cr+lidh)
+)
+
+
+lid=union(lid,hinge3)
+
 lid=difference(lid,pin)
 
 
---body=difference(body,lid)
+body=difference(body,lid)
 
 space=5
 --lid=translate(d+t+gap+space,0,h)*mirror(v(0,0,1))*lid
