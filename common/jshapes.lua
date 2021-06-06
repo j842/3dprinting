@@ -46,8 +46,8 @@ function jshapes.rotvec(v1,v2)
   
   ----------------------------------------------------
   function jshapes.nutshape(ndepth)
-  -- nyloc nuts were very tight at 4mm radius, cracking the plastic, so add a little (+0.15mm)
-  local r=4.15
+  -- nyloc nuts were very tight at 4mm radius, cracking the plastic, so add a little (+0.1mm)
+  local r=4.1
   local rx=r/2
   local ry=0.866025*r
   local nut={ v{r,0,0},v{rx,ry,0},v{-rx,ry,0},v{-r,0,0},v{-rx,-ry,0},v{rx,-ry,0}}
