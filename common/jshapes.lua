@@ -115,4 +115,15 @@ function jshapes.rotvec(v1,v2)
   end
   ----------------------------------------------------   
 
+
+
+  ----------------------------------------------------
+  -- Center any object on origin. 
+  function jshapes.centerobj(objtocenter)
+    local v=bbox(objtocenter):center()
+    objtocenter=translate(-v.x,-v.y,-v.z)*objtocenter
+    return objtocenter
+  end
+  ----------------------------------------------------
+
 return jshapes
