@@ -81,11 +81,15 @@ lid=difference(lid,lidinner)
 
 body=difference(body,lid)
 
-
-
+lidinsert=translate(0,0,h-lidh)*cylinder(d/2-t-gap,lidh)
+lidinsert=difference(lidinsert,lid)
+lidinsert=difference(lidinsert,body)
 
 space=5
-lid=translate(d+t+gap+space,0,h)*rotate(180,0,0)*lid
+shift=d+t+gap+space
+lidinsert=translate(shift/2,d*0.9,-h)*lidinsert
+lid=translate(shift,0,h)*rotate(180,0,0)*lid
 
 emit(body)
 emit(lid)
+emit(lidinsert)
