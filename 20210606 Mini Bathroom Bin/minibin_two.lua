@@ -20,10 +20,12 @@ cw=(hingew-2*cgap)/3
 hingetz=h-lidh-cr-cgap
 hingety=-d/2-hinged/2+cr-gap
 
-hingebot=translate(0,-d/2-gap,hingetz-hingeh)*cube(hingew,hinged,hingeh)
+hingebot=cube(hingew,hinged,hingeh)
+hingebot=intersection(hingebot,translate(-hingew/2,hinged/2,hingeh)*rotate(0,90,0)*cylinder(hinged,hingew))
+hingebot=translate(0,-d/2-gap,hingetz-hingeh)*hingebot
 
 function hingecircle(tx,enlarge)
-    return translate(tx,hingety,hingetz)*rotate(0,90,0)*ccylinder(cr+enlarge,cw+enlarge)
+    return translate(tx,hingety,hingetz)*rotate(0,90,0)*ccylinder(cr+2*enlarge,cw+enlarge)
 end
 
 hinge1=hingecircle(hingew/2-cw/2,0)
