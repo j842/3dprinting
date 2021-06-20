@@ -1,4 +1,9 @@
- -- Welcome to IceSL!
+ -- Toothbrush holder
+
+ -- TODO:
+ -- fix large overhang at last printed part of base (curved inner part would work)
+ -- make base removeable
+ -- fix overhang for container slot
 
 iholder=load_centered_on_plate('UTBDS_E_4_Quad.stl')
 bx=bbox(iholder):extent()
