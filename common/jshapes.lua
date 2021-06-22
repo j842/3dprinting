@@ -126,4 +126,58 @@ function jshapes.rotvec(v1,v2)
   end
   ----------------------------------------------------
 
+
+----------------------------------------------------
+-- center in x and y, and place on z=0 surface.
+function jshapes.xycenter(objtocenter)
+  local v=bbox(objtocenter):center()
+  objtocenter=translate(-v.x,-v.y,-v.z)*objtocenter
+  local h=bbox(objtocenter):min_corner().z
+  return translate(0,0,-h)*objtocenter
+end
+----------------------------------------------------
+
+----------------------------------------------------  
+-- flat nametag lying on z-axis.
+-- str       = string to engrave
+-- height    = height of nametag (y)
+-- thickness = thickness of nametag (z)
+-- rounding  = % to round (0=none, 100=half-circle ends)
+function jshapes.nametag(str,height,thickness,rounding)
+  local f=font(Path..'../ttf/StardosStencil-Bold.ttf')
+  
+  local letters=f:str(str,1)
+  local e = bbox(letters):extent()
+  local texth = 0.5*height
+  local factor = texth/e.y
+  letters=scale(factor,factor,thickness/e.z)*letters
+  local textw = bbox(letters):extent().x
+  local width=textw + 1.5*(height-texth)
+  
+  letters=jshapes.xycenter(letters)
+  
+  local box=cube(width,height,thickness)
+  e = bbox(box):extent()
+  
+  if (rounding>0) then
+    local r = rounding/100 * height/2
+    local c = difference(
+      translate(r/2,r/2,0)*
+        cube(r,r,thickness),
+      cylinder(r,thickness))
+  
+     
+    c = translate(e.x/2-r,e.y/2-r,0)
+      *c
+    c=union(mirror(v(1,0,0))*c,c)
+    c=union(mirror(v(0,1,0))*c,c)
+  
+    box=difference(box,c)
+  end
+  
+  local nametag=difference(box,letters)
+  return nametag
+  end
+----------------------------------------------------
+
 return jshapes
