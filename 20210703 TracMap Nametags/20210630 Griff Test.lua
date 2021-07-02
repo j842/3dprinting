@@ -4,6 +4,10 @@
 package.path = package.path .. ";../common/?.lua"
 jshapes=require("jshapes")
 
+
+text='Griff'
+image='griffbw.jpegW24H25T3V4B2A0C0NS.stl'
+
 h=25
 w=120
 t=3.5
@@ -19,7 +23,7 @@ end
 
 
 -- load the person's image (lithophane).
-lithopane=load_centered(Path..'griffbw.jpegW24H25T3V4B2A0C0NS.stl')
+lithopane=load_centered(Path..image)
 -- can scale if too big, 
 -- but assume lithphane is (25,25,3.5)
 --lithopane=scaleto(lithopane,v(h,h,t))*lithopane
@@ -32,10 +36,10 @@ lithopane=rotate(0,180,0)*lithopane
 l=translate(w/2-h/2,0,t/2)*lithopane
 
 f=font(Path..'/../ttf/StardosStencil-Bold.ttf')
-letters=rotate(0,180,0)*f:str('Griff',1)
+letters=rotate(0,180,0)*f:str(text,1)
 
 -- scale text to h-2*g height.
-thinness=0.4
+thinness=0.6
 lscale=(h-2*g)/bbox(letters):extent().y
 letters=scale(lscale,lscale,t-thinness)*letters
 letters=jshapes.xycenter(letters)
