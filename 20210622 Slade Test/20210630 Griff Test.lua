@@ -39,13 +39,15 @@ thinness=0.4
 lscale=(h-2*g)/bbox(letters):extent().y
 letters=scale(lscale,lscale,t-thinness)*letters
 letters=jshapes.xycenter(letters)
-letters=translate(-h/3,0,thinness)*letters
 
 -- handle letters too wide to fit nametag
 maxx=w-h-2*g
 if (bbox(letters):extent().x>maxx) then
   ls=maxx/bbox(letters):extent().x
   letters=scale(ls,1,1)*letters
+  letters=translate(0,0,thinness)*letters
+else
+  letters=translate(-h/3,0,thinness)*letters
 end
 
 -- center if possible, otherwise shift right
