@@ -83,6 +83,9 @@ tag=union({tag,border,l})
 
 -- flip up for printing
 tag=rotate(90,0,0)*tag
+tag=jshapes.xycenter(tag)
+
+tag=union(tag,rotate(180,X)*magnet('t1'))
 
 return tag
 end

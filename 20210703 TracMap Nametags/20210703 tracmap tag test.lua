@@ -2,15 +2,31 @@ package.path = package.path .. ";../common/?.lua"
 jshapes=require("jshapes")
 jtags=require("jtags")
 
+function holder()
+    local g=jtags.gettagborder()
+    local ts=jtags.gettagsize()
+    local hs=v(ts.x+2*g,30,ts.z+g)
+    local h=cube(hs)
+
+    local feather=0.5
+    h=difference(h,translate(0,hs.y/2-ts.y/2-g,hs.z-ts.z)*cube(ts+v(feather,feather,0)))
+    h=difference(h,translate(0,hs.y/2-ts.y/2,hs.z-ts.z+g)*cube(ts.x-2*g,ts.y,ts.z-g))
+
+    h=union(h,translate(0,hs.y/2-g-ts.y/2,g)*magnet('h1'))
+    return h
+
+end
+
 tag=jtags.nametag('Griff','griffbw.jpegW24H25T3V4B2A0C0NS.stl')
 
+hold=holder()
 
-l=cube(5,5,5)
-
+tmatrix=snap(hold,'h1',tag,'t1')
 set_brush_color (1,1,1,1)
-emit(tag,1)
+emit(tmatrix*tag,1)
 set_brush_color (2,0,0,0)
-emit(l,2)
+emit(hold,2)
+
 
 
     --text='Griff'
