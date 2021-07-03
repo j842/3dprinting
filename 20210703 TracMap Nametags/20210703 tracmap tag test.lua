@@ -18,23 +18,34 @@ function holder()
     -- make hole for led cable
     h=difference(h,translate(-hs.x/2+16,-hs.y/2+g,g)*cube(10,2*g,2))
 
-    -- add tracmap logo on top
-    tracmap=load_centered(Path..'Main-TracMap-Logo-GreenBlue-Clear.pngW40H9T3V4B2A0C0NS.stl')
-    tracmap=mirror(v(1,0,0))*rotate(180,X)*jshapes.xycenter(tracmap)
+    -- put some bracing behind slot.
+    h=union(h,translate(0,hs.y/2-ts.y/2-g-ts.y-feather/2,hs.z-ts.z)*cube(ts))
+    h=difference(h,translate(0,hs.y/2-ts.y/2-g-ts.y-feather/2,hs.z-ts.z+g)*cube(ts.x-2*g,ts.y,ts.z-2*g))
+
+    local stickout=g
+    tracmap=jshapes.xycenter(mirror(v(1,0,0))*rotate(180,X)*load(Path..'tracmap black.stl'))
     tbox=bbox(tracmap):extent()
-    tracmap=translate(0,0,hs.z-tbox.z)*jshapes.xycenter(tracmap)
-    h=difference(h,translate(0,0,hs.z-tbox.z)*cube(tbox))
+    tracmap=difference(scale(0.95,0.95,g/tbox.z)*cube(tbox),tracmap)
+    tracmap=jshapes.xycenter(tracmap)
+    tbox=bbox(tracmap):extent()
+    tracmap=translate(0,-hs.y/2+tbox.y/2+g,hs.z-tbox.z+g)*tracmap
     h=union(h,tracmap)
-    local dy=(hs.y-tbox.y)/2
-    h=union(h,translate(0,-dy,hs.z-tbox.z)*cube(tbox.x,dy,tbox.z))
 
 
     h=union(h,translate(0,hs.y/2-g-ts.y/2,g)*magnet('h1'))
     return h
-
 end
 
-tag=jtags.nametag('Griff','griffbw.jpegW24H25T3V4B2A0C0NS.stl')
+-- https://3dp.rocks/lithophane/
+-- Model settings:
+-- Max Size (mm)  25
+-- Thickness 3.5
+-- Border 2
+-- Thinnest layer 0.5
+-- Positive image
+text='Griff'
+image='griffbw.jpegW24H25T3V4B2A0C0NS.stl'
+tag=jtags.nametag(text,image)
 
 hold=holder()
 
@@ -46,12 +57,10 @@ if (debug) then
   set_brush_color (2,0,0,0)
   emit(hold,2)
 else
-  --emit(tag)
+  emit(tag)
   hold=translate(0,bbox(hold):extent().y,0)*jshapes.xycenter(rotate(90,X)*hold)
   emit(hold)
 end
 
 
-    --text='Griff'
-    --image='griffbw.jpegW24H25T3V4B2A0C0NS.stl'
     

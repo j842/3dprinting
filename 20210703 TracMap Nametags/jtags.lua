@@ -50,7 +50,7 @@ local f=font(Path..'/../ttf/StardosStencil-Bold.ttf')
 local letters=rotate(0,180,0)*f:str(text,1)
 
 -- scale text to h-2*g height.
-local thinness=0.6
+local thinness=0.5
 local lscale=(h-2*g)/bbox(letters):extent().y
 letters=scale(lscale,lscale,t-thinness)*letters
 letters=jshapes.xycenter(letters)
@@ -60,9 +60,9 @@ local maxx=w-h-2*g
 if (bbox(letters):extent().x>maxx) then
   local ls=maxx/bbox(letters):extent().x
   letters=scale(ls,1,1)*letters
-  letters=translate(0,0,thinness)*letters
+  letters=translate(0,0,0)*letters
 else
-  letters=translate(-h/3,0,thinness)*letters
+  letters=translate(-h/3,0,0)*letters
 end
 
 -- center if possible, otherwise shift right
