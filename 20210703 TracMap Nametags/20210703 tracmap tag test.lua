@@ -57,7 +57,7 @@ if (debug) then
   set_brush_color (2,0,0,0)
   emit(hold,2)
 else
-  emit(tag)
+  --emit(tag)
   hold=translate(0,bbox(hold):extent().y,0)*jshapes.xycenter(rotate(90,X)*hold)
   emit(hold)
 end
