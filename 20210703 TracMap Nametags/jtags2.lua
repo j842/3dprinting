@@ -89,23 +89,41 @@ return tag
 end
 -------------------------------------------------------
 
+function jtags2.flatrect(offset,rv)
+    return {
+    translate(offset)*v{-rv.x/2,-rv.y/2,rv.z},
+    translate(offset)*v{-rv.x/2,rv.y/2,rv.z},
+    translate(offset)*v{rv.x/2,rv.y/2,rv.z},
+    translate(offset)*v{rv.x/2,-rv.y/2,rv.z}
+    }
+  end
 
-function jtags2.holder()
+  function jtags2.holder()
   local g=jtags2.gettagborder()
-  local ts=jtags2.gettagsize()
+  local feather=0.5
+  local ts=jtags2.gettagsize()+v(feather,feather,0)
   local hs=v(ts.x+2*g,25,ts.z+g)
   local h=cube(hs)
 
-  local feather=0.5
   -- remove slot for tag
-  h=difference(h,translate(0,hs.y/2-ts.y/2-g,hs.z-ts.z)*cube(ts+v(feather,feather,0)))
+  h=difference(h,translate(0,hs.y/2-ts.y/2-g,hs.z-ts.z)*cube(ts))
   -- remove material in front of slot so you can see tag
   h=difference(h,translate(0,hs.y/2-ts.y/2,hs.z-ts.z+g)*cube(ts.x-2*g,ts.y,ts.z-g))
-  -- remove material behind slot so light can get to it
-  h=difference(h,translate(0,-g/2,2*g)*cube(hs.x-4*g,hs.y-ts.y-g,hs.z-3*g))
   -- make hole for led cable
   h=difference(h,translate(-hs.x/2+16,-hs.y/2+g,2*g)*cube(10,2*g,3))
+ 
+--[[ 
+  s1=jtags2.flatrect(v(0,-g/2,g),v(hs.x-4*g,hs.y-ts.y-g,0))
+  s2=jtags2.flatrect(v(0,-3*g/2,hs.z-g),v(hs.x-2*g,hs.y-ts.y-3*g,0))
+  local se= sections_extrude({
+    s2,
+    s1
+  })
+  h=union(h,translate(100,0,0)*se) ]]
 
+
+  -- remove material behind slot so light can get to it
+  h=difference(h,translate(0,-g/2,2*g)*cube(hs.x-4*g,hs.y-ts.y-g,hs.z-3*g))
   -- save plastic by cutting out non-visible inside
   h=difference(h,translate(0,-3*g/2,g)*cube(hs.x-2*g,hs.y-ts.y-3*g,hs.z-2*g))
 
