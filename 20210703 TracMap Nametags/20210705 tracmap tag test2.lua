@@ -20,7 +20,7 @@
   
   hold=jtags2.holder()
   
-  debug=true
+  debug=false
   if (debug) then
     tmatrix=snap(hold,'h1',tag,'t1')
     set_brush_color (1,1,1,1)
@@ -28,10 +28,9 @@
     set_brush_color (2,0,0,0)
     emit(hold,2)
   else
-    tag=rotate(180,Z)*tag
+    tag=rotate(90,Z)*tag
     emit(tag)
-    hold=translate(0,bbox(hold):extent().y,0)*jshapes.xycenter(rotate(90,X)*hold)
+    hold=translate(bbox(hold):extent().y,0,0)*jshapes.xycenter(rotate(90,Z)*rotate(90,X)*hold)
     emit(hold)
   end
-  
   

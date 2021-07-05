@@ -14,6 +14,23 @@ function jtags2.gettagborder()
 end
 
 -------------------------------------------------------
+
+function jtags2.gettagshape()
+  local ts=jtags2.gettagsize()
+  local g=jtags2.gettagborder()
+  local tagshape = cube(ts)
+  local t=ts.y
+  local h=math.sqrt(t*t+g*g)
+  local theta=math.atan(t,g)*57.296
+  -- fudge factors for offsets rather than correct trig. To fix!
+  r1=translate(-ts.x/2-0.9,0.3,0)*rotate(theta,Z)*cube(h,h,ts.z)
+  r1=union(r1,mirror(v(1,0,0))*r1)
+  tagshape=difference(tagshape,r1)
+
+  return tagshape
+end
+
+-------------------------------------------------------
 function jtags2.nametag(text,image)
 
 --text='Griff'
@@ -24,7 +41,7 @@ local w=tsize.x
 local t=tsize.y
 local h=tsize.z
 local e=jtags2.gettagborder()
-local g=3
+local textgap=2
 
 -- scale an object to a desired size.
 function scaleto(obj,st)
@@ -52,12 +69,12 @@ local letters=rotate(0,180,0)*f:str(text,0.5)
 
 -- scale text to h-2*g height.
 local thinness=0.5
-local lscale=(0.8*(h-2*g))/bbox(letters):extent().y
+local lscale=(0.8*(h-2*textgap))/bbox(letters):extent().y
 letters=scale(lscale,lscale,t-thinness)*letters
 letters=jshapes.xycenter(letters)
 
 -- handle letters too wide to fit nametag
-local maxx=w-h-2*g
+local maxx=w-h-2*textgap
 if (bbox(letters):extent().x>maxx) then
   local ls=maxx/bbox(letters):extent().x
   letters=scale(ls,1,1)*letters
@@ -66,7 +83,7 @@ end
 -- center if possible, otherwise shift right
 local lettersbox=bbox(letters):extent()
 if (lettersbox.x>w-2*h) then
-  local deltax=(w-lettersbox.x)/2-h-g
+  local deltax=(w-lettersbox.x)/2-h-textgap
   letters=translate(deltax,0,0)*letters
 end
 
@@ -82,6 +99,7 @@ tag=union({tag,border,l})
 -- flip up for printing
 tag=rotate(90,0,0)*tag
 tag=jshapes.xycenter(tag)
+tag=intersection(tag,jtags2.gettagshape())
 
 tag=union(tag,rotate(180,X)*magnet('t1'))
 
@@ -98,15 +116,17 @@ function jtags2.flatyrect(offset,x,z)
     }
   end
 
-  function jtags2.holder()
+-------------------------------------------------------
+
+function jtags2.holder()
   local g=jtags2.gettagborder()
-  local feather=0.5
+  local feather=0.6
   local ts=jtags2.gettagsize()+v(feather,feather,0)
   local hs=v(ts.x+2*g,25,ts.z+g)
   local h=cube(hs)
 
   -- remove slot for tag
-  h=difference(h,translate(0,hs.y/2-ts.y/2-g,hs.z-ts.z)*cube(ts))
+  h=difference(h,translate(0,hs.y/2-ts.y/2-g,hs.z-ts.z)*jtags2.gettagshape()) --cube(ts))
   -- remove material in front of slot so you can see tag
   h=difference(h,translate(0,hs.y/2-ts.y/2,hs.z-ts.z+g)*cube(ts.x-2*g,ts.y,ts.z-g))
   -- make hole for led cable
