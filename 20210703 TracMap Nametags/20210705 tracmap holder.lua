@@ -14,5 +14,3 @@ set_setting_value('infill_percentage_0',5)
 hold=jtags2.holder()
 hold=jshapes.xycenter(rotate(90,X)*hold)
 emit(hold)
-
-
