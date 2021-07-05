@@ -5,5 +5,6 @@ jshapes=require("jshapes")
 jtags2=require("jtags2")
 
 hold=jtags2.holder()
-  hold=jshapes.xycenter(rotate(90,X)*hold)
+  --hold=jshapes.xycenter(rotate(90,X)*hold)
   emit(hold)
+

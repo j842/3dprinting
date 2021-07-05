@@ -102,9 +102,12 @@ function jtags2.holder()
   -- remove material in front of slot so you can see tag
   h=difference(h,translate(0,hs.y/2-ts.y/2,hs.z-ts.z+g)*cube(ts.x-2*g,ts.y,ts.z-g))
   -- remove material behind slot so light can get to it
-  h=difference(h,translate(0,0,2*g)*cube(hs.x-4*g,hs.y-ts.y-2*g,hs.z-3*g))
+  h=difference(h,translate(0,-g/2,2*g)*cube(hs.x-4*g,hs.y-ts.y-g,hs.z-3*g))
   -- make hole for led cable
   h=difference(h,translate(-hs.x/2+16,-hs.y/2+g,2*g)*cube(10,2*g,3))
+
+  -- save plastic by cutting out non-visible inside
+  h=difference(h,translate(0,-3*g/2,g)*cube(hs.x-2*g,hs.y-ts.y-3*g,hs.z-2*g))
 
   -- add TracMap text to top
   local stickout=g
