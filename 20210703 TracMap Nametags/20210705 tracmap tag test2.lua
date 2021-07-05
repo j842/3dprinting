@@ -19,7 +19,7 @@
   tag=jtags2.nametag(text,image)
   
   hold=jtags2.holder()
-  
+
   debug=false
   if (debug) then
     tmatrix=snap(hold,'h1',tag,'t1')
@@ -33,4 +33,5 @@
     hold=translate(bbox(hold):extent().y,0,0)*jshapes.xycenter(rotate(90,Z)*rotate(90,X)*hold)
     emit(hold)
   end
-  
+ 
+
