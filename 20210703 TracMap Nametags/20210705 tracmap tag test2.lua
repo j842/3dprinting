@@ -20,7 +20,7 @@
   
   hold=jtags2.holder()
 
-  debug=false
+  debug=true
   if (debug) then
     tmatrix=snap(hold,'h1',tag,'t1')
     set_brush_color (1,1,1,1)
@@ -34,4 +34,3 @@
     emit(hold)
   end
  
-

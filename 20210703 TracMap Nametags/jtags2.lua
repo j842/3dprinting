@@ -6,7 +6,7 @@ local jtags2 = {}
 -------------------------------------------------------
 
 function jtags2.gettagsize()
-   return v(120,3.5,28)
+   return v(120,3.5,25)
 end
 
 function jtags2.gettagborder()
@@ -108,9 +108,8 @@ tag=union({tag,border,l})
 tag=rotate(90,0,0)*tag
 tag=jshapes.xycenter(tag)
 tag=intersection(tag,jtags2.gettagshape())
-tag=jshapes.xycenter(rotate(0,180,0)*tag)
-
 tag=union(tag,rotate(180,X)*magnet('t1'))
+tag=jshapes.xycenter(rotate(0,180,0)*tag)
 
 return tag
 end
