@@ -142,10 +142,8 @@ function jtags2.holder()
   h=difference(h,translate(-hs.x/2+16,-hs.y/2+g,2*g)*cube(10,2*g,3))
  
   -- tapered ridge for tag to rest against (minimising plastic without needing big supports)
-  -- increase g a little so support structure doesn't make big supports
-  local gg=g+0.2
-  s1=jtags2.flatyrect(v(0,-(hs.y-ts.y)/2,gg),hs.x-2*gg,hs.z-2*gg)
-  s2=jtags2.flatyrect(v(0,(hs.y-ts.y)/2,2*gg),hs.x-4*gg,hs.z-3*gg)
+  s1=jtags2.flatyrect(v(0,-(hs.y-ts.y)/2,g),hs.x-2*g,hs.z-2*g)
+  s2=jtags2.flatyrect(v(0,(hs.y-ts.y)/2,2*g),hs.x-4*g,hs.z-3*g)
   local se= sections_extrude({s1,s2})
   h=difference(h,se) 
 
