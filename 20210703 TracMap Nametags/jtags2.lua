@@ -89,12 +89,12 @@ return tag
 end
 -------------------------------------------------------
 
-function jtags2.flatrect(offset,rv)
+function jtags2.flatyrect(offset,x,z)
     return {
-    translate(offset)*v{-rv.x/2,-rv.y/2,rv.z},
-    translate(offset)*v{-rv.x/2,rv.y/2,rv.z},
-    translate(offset)*v{rv.x/2,rv.y/2,rv.z},
-    translate(offset)*v{rv.x/2,-rv.y/2,rv.z}
+    translate(offset)*v{-x/2,0,0},
+    translate(offset)*v{-x/2,0,z},
+    translate(offset)*v{x/2,0,z},
+    translate(offset)*v{x/2,0,0}
     }
   end
 
@@ -112,20 +112,20 @@ function jtags2.flatrect(offset,rv)
   -- make hole for led cable
   h=difference(h,translate(-hs.x/2+16,-hs.y/2+g,2*g)*cube(10,2*g,3))
  
---[[ 
-  s1=jtags2.flatrect(v(0,-g/2,g),v(hs.x-4*g,hs.y-ts.y-g,0))
-  s2=jtags2.flatrect(v(0,-3*g/2,hs.z-g),v(hs.x-2*g,hs.y-ts.y-3*g,0))
+  -- tapered ridge for tag to rest against (minimising plastic without needing supports)
+  s1=jtags2.flatyrect(v(0,-(hs.y-ts.y)/2,g),hs.x-2*g,hs.z-2*g)
+  s2=jtags2.flatyrect(v(0,(hs.y-ts.y)/2,2*g),hs.x-4*g,hs.z-3*g)
   local se= sections_extrude({
-    s2,
-    s1
+    s1,
+    s2
   })
-  h=union(h,translate(100,0,0)*se) ]]
-
+  h=difference(h,se) 
+-- h=se
 
   -- remove material behind slot so light can get to it
-  h=difference(h,translate(0,-g/2,2*g)*cube(hs.x-4*g,hs.y-ts.y-g,hs.z-3*g))
+  --h=difference(h,translate(0,-g/2,2*g)*cube(hs.x-4*g,hs.y-ts.y-g,hs.z-3*g))
   -- save plastic by cutting out non-visible inside
-  h=difference(h,translate(0,-3*g/2,g)*cube(hs.x-2*g,hs.y-ts.y-3*g,hs.z-2*g))
+  --h=difference(h,translate(0,-3*g/2,g)*cube(hs.x-2*g,hs.y-ts.y-3*g,hs.z-2*g))
 
   -- add TracMap text to top
   local stickout=g
