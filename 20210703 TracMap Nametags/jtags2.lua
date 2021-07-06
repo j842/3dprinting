@@ -74,12 +74,12 @@ local l=translate(w/2-h/2,0,t/2)*lithopane
 local f=font(Path..'/../ttf/OtomanopeeOne-Regular.ttf')
 --local f=font(Path..'/../ttf/Lato-Black.ttf')
 local letters=rotate(0,180,0)*f:str(text,0.5)
+letters=jshapes.xycenter(letters)
 
 -- scale text to h-2*g height.
 local thinness=0.5
 local lscale=(0.8*(h-2*textgap))/bbox(letters):extent().y
 letters=scale(lscale,lscale,t-thinness)*letters
-letters=jshapes.xycenter(letters)
 
 -- handle letters too wide to fit nametag
 local maxx=w-h-2*textgap-e
@@ -88,12 +88,10 @@ if (bbox(letters):extent().x>maxx) then
   letters=scale(ls,1,1)*letters
 end
 
--- center if possible, otherwise shift right
-local lettersbox=bbox(letters):extent()
-if (lettersbox.x>w-2*h) then
-  local deltax=(w-lettersbox.x)/2-h-textgap
-  letters=translate(deltax,0,0)*letters
-end
+-- about 20% of the empty space on left, 80% on right.
+local lbx=bbox(letters):extent().x
+local deltax=w/2-h-0.2*(w-h-lbx)-lbx/2
+letters=translate(deltax,0,0)*letters
 
 -- inverse of letters
 local tag=translate(-h/2,0,0)*cube(w-h,h,t)
