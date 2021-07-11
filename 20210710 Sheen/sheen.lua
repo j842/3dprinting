@@ -1,4 +1,5 @@
-package.path = package.path .. ";../common/?.lua"jshapes=require("jshapes")
+package.path = package.path .. ";../common/?.lua"
+jshapes=require("jshapes")
 
 --[[ 
 
