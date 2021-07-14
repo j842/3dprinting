@@ -57,7 +57,7 @@ set_brush_color(1,0,1,0)
 emit(mnt,1)
 
 
---x=rotate(180,X)*lolinv3template()
+x=rotate(180,X)*lolinv3template()
 x=translate(0,0,mountheight)*lolinv3template()
 
 --y=load('NodeMcu_V3.stl')
@@ -65,3 +65,27 @@ x=translate(0,0,mountheight)*lolinv3template()
 
 set_brush_color (2,1,0,0)
 emit(x,2)
+
+
+
+
+d=3/2
+set={}
+for i=1,8 do
+  set[i]={}
+
+--  table.insert(set[i],v(0,0,i))
+--  table.insert(set[i],v(3*i,0,i))
+--  table.insert(set[i],v(0,10,i))
+
+  for j=1,10 do
+    jj=3.14*(j-1)/9
+    ii=(i-5)
+    if (ii<1) then ii=1 end
+    ii=1+ii/5
+    table.insert(set[i],v(d*math.cos(jj)/ii,ii+d*math.sin(jj),i))
+  end
+end
+se = sections_extrude(set)
+set_brush_color (3,0,0,1)
+emit(se,3)
