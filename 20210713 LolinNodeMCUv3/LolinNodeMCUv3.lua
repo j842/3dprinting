@@ -4,6 +4,8 @@ function lolinsize()
   return v(31,57.5,1.5)
 end
 
+----------------------------------------
+
 function lolinv3template()
 -- ESP-8266 Lolin NodeMCU v3 board
 local w=lolinsize().x
@@ -36,56 +38,80 @@ board=difference(board,hole)
 return board
 end
 
-function lolinv3mount(h)
-local ls=lolinsize()
+----------------------------------------
 
-local hole=union(
-  cylinder(3/2,h),
-  translate(0,0,h)*cylinder(2.8/2,ls.z+3)
-)
 
-hole=translate(-ls.x/2+2.3,-ls.y/2+2.3,0)*hole
-hole=union(hole,mirror(v(1,0,0))*hole)
-hole=union(hole,mirror(v(0,1,0))*hole)
-return hole
+function getset(r,z)
+  local set={}
+  local j
+  local c=50
+  for j=1,c do
+    local jj=2*3.14*(j-1)/(c-1)
+    table.insert(set,v(r*math.cos(jj),r*math.sin(jj),z))
+  end
+  return set
 end
 
+function getclip(r,h,t)
+  local set={}
+  local o=.3
+  local op=5
+  local f=0.2
+  local l=f+2*op*o
+  table.insert(set,getset(r,0))
+  table.insert(set,getset(r,h-op*o))
+  table.insert(set,getset(r+o,h-f))
+  table.insert(set,getset(r,h))
+  table.insert(set,getset(r,h+t))
+  table.insert(set,getset(r+o,h+t+f))
+  table.insert(set,getset(r,h+t+f+op*o))
+  table.insert(set,getset(r,h+t+l))
+  
+  se = sections_extrude(set)
+  se = difference(se,
+        translate(0,0,h+t/2-l)*
+        cube(o*op,(r+o)*2,2*l+t)
+        )
 
-mountheight=4
-mnt=lolinv3mount(mountheight)
+return se
+end
+
+function lolinv3mount(h)
+local ls=lolinsize()
+local se = getclip(3/2,h,ls.z)
+--set_brush_color (3,0,0,1)
+se=translate(-ls.x/2+2.3,-ls.y/2+2.3,0)*se
+se=union(se,mirror(v(1,0,0))*se)
+se=union(se,mirror(v(0,1,0))*se)
+
+baset=1
+--se=translate(0,0,baset)*se
+se=union(se,cube(ls.x,ls.y,baset))
+return se
+end
+
+----------------------------------------
+
+
+-- MAIN
+
+h=5
+mnt=lolinv3mount(h)
 set_brush_color(1,0,1,0)
 emit(mnt,1)
 
-
-x=rotate(180,X)*lolinv3template()
-x=translate(0,0,mountheight)*lolinv3template()
-
---y=load('NodeMcu_V3.stl')
---emit(y)
-
+y=translate(0,0,0.8)*rotate(180,X)*load('NodeMcu_V3.stl')
+y=translate(0,0,h)*y
 set_brush_color (2,1,0,0)
-emit(x,2)
+emit(y,2)
+
+x=lolinv3template()
+x=translate(0,0,h)*x
+set_brush_color (3,1,0,1)
+emit(x,3)
 
 
 
 
-d=3/2
-set={}
-for i=1,8 do
-  set[i]={}
 
---  table.insert(set[i],v(0,0,i))
---  table.insert(set[i],v(3*i,0,i))
---  table.insert(set[i],v(0,10,i))
 
-  for j=1,10 do
-    jj=3.14*(j-1)/9
-    ii=(i-5)
-    if (ii<1) then ii=1 end
-    ii=1+ii/5
-    table.insert(set[i],v(d*math.cos(jj)/ii,ii+d*math.sin(jj),i))
-  end
-end
-se = sections_extrude(set)
-set_brush_color (3,0,0,1)
-emit(se,3)
