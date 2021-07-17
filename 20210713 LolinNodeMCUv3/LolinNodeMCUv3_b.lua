@@ -1,6 +1,17 @@
 package.path = package.path .. ";../common/?.lua"
 jshapes=require("jshapes")
 
+set_setting_value('use_different_thickness_first_layer',true)
+set_setting_value('z_layer_height_first_layer_mm',0.3)
+set_setting_value('z_layer_height_mm',0.15)
+set_setting_value('gen_supports',true)
+set_setting_value('support_overhang_overlap_fraction',0.9)
+set_setting_value('infill_percentage_0',5)
+set_setting_value('infill_percentage_1',5)
+set_setting_value('infill_percentage_2',5)
+
+--------------------------------
+
 function lolinsize()
   return v(31,57.5,1.5)
 end
@@ -16,10 +27,22 @@ function holeoffset()
 )
 end
 
+function usbsize()
+   return v(8,6,3)
+end
+
 -- 25 between holes in x
 -- 52 between holes in y
 
 ----------------------------------------
+
+function usbplug(elongate)
+  local musbstickout=1.5
+  local us=usbsize()
+  local musb=cube(us.x,us.y+elongate,us.z)
+  musb=translate(0,musbstickout-us.y/2+lolinsize().y/2,-us.z)*musb
+  return musb
+end
 
 function lolinv3template()
   -- ESP-8266 Lolin NodeMCU v3 board
@@ -28,19 +51,16 @@ function lolinv3template()
   local boardthickness=lolinsize().z
   local pinheight=9
   local clearance=4
-  local musbh=3
-  local musbw=8
-  local musbl=6
-  local musbstickout=1.5
 
   local board=cube(w,l,boardthickness)
 
-  local musb=cube(musbw,musbl,musbh)
-  musb=translate(0,musbstickout-musbl/2+l/2,-musbh)*musb
+  local musb=usbplug(0)
+--cube(musbw,musbl,musbh)
+--  musb=translate(0,musbstickout-musbl/2+l/2,-musbh)*musb
   board=union(board,musb)
 
   local esp8266=
-    translate(0,-13.7,-musbh)*
+    translate(0,-13.7,-usbsize().z)*
     cube(13,16,clearance)
   board=union(board,esp8266)
 
@@ -94,15 +114,18 @@ end
 function getclip(baset,h,t)
   local set={}
   local cy=4
-  local cx=2*baset
-  table.insert(set, getrect(cx,cy,0))
-  table.insert(set, getrect(cx,cy,cx/2))
-  table.insert(set, getrect(cx/2,cy,h/2+cx/4)) -- half way between cx/2 and h.
-  table.insert(set, getrect(cx/2,cy,h+t-0.01))
+  local cx=1.4*baset
+  table.insert(set, getrect(2*baset,cy,0))
+  table.insert(set, getrect(2*baset,cy,baset))
+  table.insert(set, getrect(baset,cy,h/2+baset/2)) -- half way between baset and h.
+  table.insert(set, getrect(baset,cy,h+t-0.01))
   table.insert(set, getrect(cx,cy,h+t))
-  table.insert(set, getrect(cx/2,cy,h+t+baset*2))
-  local se = sections_extrude(set)
-  return jshapes.xycenter(se)
+  table.insert(set, getrect(baset,cy,h+t+baset*2))
+  local se =  jshapes.xycenter(sections_extrude(set))
+   
+  se=union(se,translate(-baset/2,0,0)*cube(baset,cy*1.15,h+t+baset*2))
+  se=rotate(90,Z)*se
+  return se
 end
 
 ----------------------------------------
@@ -128,15 +151,22 @@ function lolinv3mount(h)
   local sideclip=getclip(baset,h,ls.z)
   local cxt=2
   sideclip=translate(  
-    -ls.x/2,
-    -ls.y/2+2.5*holeoffset().y,
+    -ls.x/2+3*holeoffset().x,
+    -ls.y/2,
     0)*sideclip
-  sideclip=dualmirror(sideclip)
+  sideclip=dualmirror(sideclip)--union(sideclip,mirror(v(1,0,0))*sideclip)
   se=union(se,sideclip)
 
   local cc=cube(ls.x,ls.y,baset)
   cc=difference(cc,scale((ls.x-2*baset)/ls.x,(ls.y-2*baset)/ls.y,1)*cc)
   se=union(se,cc)
+
+  local backplate=translate(0,ls.y/2+baset/2,0)*cube(ls.x,baset,ls.z+h)
+  backplate=difference(backplate,translate(0,0,h)*usbplug(baset))
+
+  backplate=union(backplate,mirror(v(0,1,0))*backplate)
+  se=union(se,backplate)
+
   return se
 end
 
