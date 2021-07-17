@@ -13,7 +13,7 @@ set_setting_value('infill_percentage_2',5)
 --------------------------------
 
 function lolinsize()
-  return v(31,57.5,1.5)
+  return v(31,58.5,1.5)
 end
 
 function holesize()
