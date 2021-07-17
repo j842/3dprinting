@@ -27,7 +27,7 @@ local l=lolinsize().y
 local boardthickness=lolinsize().z
 local pinheight=9
 local clearance=4
-local musbh=3.5
+local musbh=3
 local musbw=8
 local musbl=6
 local musbstickout=1.5
@@ -74,37 +74,48 @@ function getclip(r,h,t)
   local o=.3
   local op=5
   local f=0.2
-  local l=f+2*op*o
+  local l=f+op*o
   table.insert(set,getset(r+2*o,0))
   table.insert(set,getset(r+3*o,h-op*o))
   table.insert(set,getset(r+2*o,h-f))
   table.insert(set,getset(r,h))
-  table.insert(set,getset(r,h+t))
-  table.insert(set,getset(r+o,h+t+f))
-  table.insert(set,getset(r,h+t+f+op*o))
   table.insert(set,getset(r,h+t+l))
-  
   se = sections_extrude(set)
-  --se = difference(se,
-  --      translate(0,0,h+t/2-l)*
-  --        cube(o*op,(r+o)*2,2*l+t)
-  --      )
+  return se
+end
 
-return se
+function dualmirror(obj)
+  obj=union(obj,mirror(v(1,0,0))*obj)
+  obj=union(obj,mirror(v(0,1,0))*obj)
+  return obj
 end
 
 function lolinv3mount(h)
 local ls=lolinsize()
 local se = getclip(3/2,h,ls.z)
---set_brush_color (3,0,0,1)
 se=translate(
   -ls.x/2+holeoffset().x,
   -ls.y/2+holeoffset().y,0)*se
-se=union(se,mirror(v(1,0,0))*se)
-se=union(se,mirror(v(0,1,0))*se)
+se=dualmirror(se)
+
+local cxt=2
+local f=0.2
+local cy=4
+local sideclip=cube(cxt,cy,h+ls.z+f)
+sideclip=union({sideclip,
+  translate(3/2-cxt/2,0,h+ls.z+f)*
+  cube(3,cy,ls.z*2),
+  translate(5/2-cxt/2,0,h-f-ls.z*2)*
+  cube(5,cy,ls.z*2)}
+)
+sideclip=translate(  
+  -ls.x/2-cxt/2,
+  -ls.y/2+2.5*holeoffset().y,
+  0)*sideclip
+sideclip=dualmirror(sideclip)
+se=union(se,sideclip)
 
 local baset=2
---se=translate(0,0,baset)*se
 local cc=cube(ls.x,ls.y,baset)
 cc=difference(cc,scale(0.8,0.9,1)*cc)
 se=union(se,cc)
