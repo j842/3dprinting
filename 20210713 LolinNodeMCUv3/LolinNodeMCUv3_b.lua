@@ -122,7 +122,7 @@ function getclip(baset,h,t)
   local se =  jshapes.xycenter(sections_extrude(set))
    
   se=union(se,translate(-baset/2,0,0)*cube(baset,cy*1.15,h+t+baset*2))
-  se=rotate(90,Z)*se
+  se=rotate(-90,Z)*se
   return se
 end
 
@@ -145,14 +145,18 @@ function lolinv3mount(h)
     -ls.y/2+holeoffset().y,0)*se
   se=dualmirror(se)
 
+  local asymbackplate=0.5 --the side opposite the USB connector is a bit smaller (assymetrical)
+
   local baset=2
   local sideclip=getclip(baset,h,ls.z)
   local cxt=2
   sideclip=translate(  
-    -ls.x/2+3*holeoffset().x,
-    -ls.y/2,
+    ls.x/2-3*holeoffset().x,
+    ls.y/2,
     0)*sideclip
-  sideclip=dualmirror(sideclip)--union(sideclip,mirror(v(1,0,0))*sideclip)
+  sideclip=union(sideclip,mirror(v(1,0,0))*sideclip)
+  sideclip=union(sideclip,translate(0,asymbackplate,0)*mirror(v(0,1,0))*sideclip)
+  --sideclip=dualmirror(sideclip)--union(sideclip,mirror(v(1,0,0))*sideclip)
   se=union(se,sideclip)
 
   local cc=cube(ls.x,ls.y,baset)
@@ -160,8 +164,8 @@ function lolinv3mount(h)
   se=union(se,cc)
 
   local backplate=translate(0,ls.y/2+baset/2,0)*cube(ls.x,baset,ls.z+h)
-  backplate=union(backplate,mirror(v(0,1,0))*backplate)
-  se=union(se,backplate)
+  se=union({se, backplate,
+    translate(0,asymbackplate,0)*mirror(v(0,1,0))*backplate})
   se=difference(se,translate(0,0,h)*usbplug(baset))
 
   return se
