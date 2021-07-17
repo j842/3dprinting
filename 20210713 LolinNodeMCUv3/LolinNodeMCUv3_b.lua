@@ -145,7 +145,7 @@ function lolinv3mount(h)
     -ls.y/2+holeoffset().y,0)*se
   se=dualmirror(se)
 
-  local asymbackplate=0.5 --the side opposite the USB connector is a bit smaller (assymetrical)
+  local asymbackplate=0.4 --the side opposite the USB connector is a bit smaller (assymetrical)
 
   local baset=2
   local sideclip=getclip(baset,h,ls.z)
