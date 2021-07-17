@@ -70,7 +70,7 @@ function getclip(r,h,t)
   se = sections_extrude(set)
   se = difference(se,
         translate(0,0,h+t/2-l)*
-        cube(o*op,(r+o)*2,2*l+t)
+          cube(o*op,(r+o)*2,2*l+t)
         )
 
 return se
@@ -84,9 +84,11 @@ se=translate(-ls.x/2+2.3,-ls.y/2+2.3,0)*se
 se=union(se,mirror(v(1,0,0))*se)
 se=union(se,mirror(v(0,1,0))*se)
 
-baset=1
+local baset=1
 --se=translate(0,0,baset)*se
-se=union(se,cube(ls.x,ls.y,baset))
+local cc=cube(ls.x,ls.y,baset)
+cc=difference(cc,scale(0.9,0.95,1)*cc)
+se=union(se,cc)
 return se
 end
 
@@ -103,12 +105,12 @@ emit(mnt,1)
 y=translate(0,0,0.8)*rotate(180,X)*load('NodeMcu_V3.stl')
 y=translate(0,0,h)*y
 set_brush_color (2,1,0,0)
-emit(y,2)
+--emit(y,2)
 
 x=lolinv3template()
 x=translate(0,0,h)*x
 set_brush_color (3,1,0,1)
-emit(x,3)
+--emit(x,3)
 
 
 
