@@ -7,7 +7,7 @@ set_setting_value('z_layer_height_mm',0.15)
 set_setting_value('gen_supports',true)
 set_setting_value('support_overhang_overlap_fraction',0.9)
 set_setting_value('infill_percentage_0',5)
-set_setting_value('infill_percentage_1',5)
+set_setting_value('infill_percentage_1',100) -- mount
 set_setting_value('infill_percentage_2',5)
 
 --------------------------------
@@ -39,7 +39,7 @@ end
 function usbplug(elongate)
   local musbstickout=1.5
   local us=usbsize()
-  local musb=cube(us.x,us.y+elongate,us.z)
+  local musb=cube(us.x,us.y+elongate,us.z+lolinsize().z)
   musb=translate(0,musbstickout-us.y/2+lolinsize().y/2,-us.z)*musb
   return musb
 end
@@ -55,8 +55,6 @@ function lolinv3template()
   local board=cube(w,l,boardthickness)
 
   local musb=usbplug(0)
---cube(musbw,musbl,musbh)
---  musb=translate(0,musbstickout-musbl/2+l/2,-musbh)*musb
   board=union(board,musb)
 
   local esp8266=
@@ -118,8 +116,8 @@ function getclip(baset,h,t)
   table.insert(set, getrect(2*baset,cy,0))
   table.insert(set, getrect(2*baset,cy,baset))
   table.insert(set, getrect(baset,cy,h/2+baset/2)) -- half way between baset and h.
-  table.insert(set, getrect(baset,cy,h+t-0.01))
-  table.insert(set, getrect(cx,cy,h+t))
+  table.insert(set, getrect(baset,cy,h+t+0.1))
+  table.insert(set, getrect(cx,cy,h+t+0.3))
   table.insert(set, getrect(baset,cy,h+t+baset*2))
   local se =  jshapes.xycenter(sections_extrude(set))
    
@@ -162,10 +160,9 @@ function lolinv3mount(h)
   se=union(se,cc)
 
   local backplate=translate(0,ls.y/2+baset/2,0)*cube(ls.x,baset,ls.z+h)
-  backplate=difference(backplate,translate(0,0,h)*usbplug(baset))
-
   backplate=union(backplate,mirror(v(0,1,0))*backplate)
   se=union(se,backplate)
+  se=difference(se,translate(0,0,h)*usbplug(baset))
 
   return se
 end
