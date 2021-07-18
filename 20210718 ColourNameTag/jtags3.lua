@@ -145,13 +145,13 @@ function jtags3.holder()
   h=difference(h,se) 
 
   -- add TracMap text to top
-  local stickout=g
+  local stickout=g/2
   tracmap=jshapes.xycenter(mirror(v(1,0,0))*rotate(180,X)*load(Path..'_tracmap black.stl'))
   tbox=bbox(tracmap):extent()
-  tracmap=difference(scale(0.95,0.95,g/tbox.z)*cube(tbox),tracmap)
+  tracmap=difference(scale(0.95,0.95,stickout/tbox.z)*cube(tbox),tracmap)
   tracmap=jshapes.xycenter(tracmap)
   tbox=bbox(tracmap):extent()
-  tracmap=translate(0,-hs.y/2+tbox.y/2+g,hs.z-tbox.z+g)*tracmap
+  tracmap=translate(0,-hs.y/2+tbox.y/2+g,hs.z-tbox.z+stickout)*tracmap
   h=union(h,tracmap)
 
 

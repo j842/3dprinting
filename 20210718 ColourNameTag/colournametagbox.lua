@@ -6,12 +6,18 @@ v3=require("v3")
 set_setting_value('use_different_thickness_first_layer',true)
 set_setting_value('z_layer_height_first_layer_mm',0.3)
 set_setting_value('z_layer_height_mm',0.15)
-set_setting_value('gen_supports',true)
+set_setting_value('gen_supports',false)
 set_setting_value('support_overhang_overlap_fraction',0.9)
-set_setting_value('infill_percentage_0',5)
-set_setting_value('infill_percentage_1',100) -- mount
-set_setting_value('infill_percentage_2',5)
 
+-- case
+set_setting_value('infill_percentage_0',5)
+
+-- ESP8266 mount
+set_setting_value('infill_percentage_1',100) -- mount
+
+-- templates (don't get printed)
+set_setting_value('infill_percentage_2',5)
+set_setting_value('infill_percentage_3',5)
 
 
 -- MAIN
@@ -33,11 +39,12 @@ function main()
 
   set_brush_color (0,0,0,0.1)
   local hold=jtags3.holder()
-  hold=jshapes.xycenter(rotate(90,Z)*rotate(90,X)*hold)
-  hold=translate(0.5,-27,0)*hold
+  hold=jshapes.xycenter(rotate(270,Z)*rotate(90,X)*hold)
+  hold=translate(-0.6,20,0)*hold
   emit(hold,0)
 end
 
 
 ----------------------------------------
 main()
+
