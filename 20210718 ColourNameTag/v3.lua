@@ -4,7 +4,7 @@ local v3 = {}
 --------------------------------
 
 function v3.boardsz()
-    return v(31,58.5,1.5)
+    return v(31,59,1.5)
   end
   
   function v3.holesz()
@@ -136,7 +136,7 @@ function v3.boardsz()
       -ls.y/2+v3.holeoff().y,0)*se
     se=v3.dualmirror(se)
   
-    local asymbackplate=0.4 --the side opposite the USB connector is a bit smaller (assymetrical)
+    local asymbackplate=0.6 --the side opposite the USB connector is a bit smaller (assymetrical)
   
     local baset=2
     local sideclip=v3.getclip(baset,h,ls.z)

@@ -11,9 +11,11 @@ set_setting_value('support_overhang_overlap_fraction',0.9)
 
 -- case
 set_setting_value('infill_percentage_0',5)
+set_setting_value('speed_multiplier_1',1)  
 
 -- ESP8266 mount
-set_setting_value('infill_percentage_1',100) -- mount
+set_setting_value('infill_percentage_1',100) 
+set_setting_value('speed_multiplier_1',0.7)  
 
 -- templates (don't get printed)
 set_setting_value('infill_percentage_2',5)
@@ -47,4 +49,3 @@ end
 
 ----------------------------------------
 main()
-

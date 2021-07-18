@@ -136,7 +136,7 @@ function jtags3.holder()
   -- remove material in front of slot so you can see tag
   h=difference(h,translate(0,hs.y/2-ts.y/2,hs.z-ts.z+g)*cube(ts.x-2*g,ts.y,ts.z-g))
   -- make hole for led cable
-  h=difference(h,translate(-hs.x/2+16,-hs.y/2+g,2*g)*cube(10,2*g,3))
+  h=difference(h,translate(-hs.x/2+16,-hs.y/2+g,2*g)*cube(10.5,2*g,7.5))
  
   -- tapered ridge for tag to rest against (minimising plastic without needing big supports)
   s1=jtags3.flatyrect(v(0,-(hs.y-ts.y)/2,g),hs.x-2*g,hs.z-2*g)
