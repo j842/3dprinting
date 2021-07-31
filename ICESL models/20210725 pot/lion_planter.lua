@@ -12,11 +12,11 @@ set_setting_value('infill_percentage_0',5)
 
 set_brush_color(1,0,1,0)
 set_setting_value('infill_percentage_1',100)
-
+set_setting_value('enable_ironing_1',true)
 
 -- position the holder
 
-halfthick=3
+halfthick=2
 sbox=load_centered_on_plate('pot.stl')
 sbox=scale(15/10)*sbox
 
