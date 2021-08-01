@@ -3,7 +3,7 @@
 -- print settings
 set_setting_value('use_different_thickness_first_layer',false)
 --set_setting_value('z_layer_height_first_layer_mm',0.2)
-set_setting_value('z_layer_height_mm',0.2)
+set_setting_value('z_layer_height_mm',0.3)
 set_setting_value('gen_supports',false)
 set_setting_value('add_brim',false)
 
@@ -12,11 +12,11 @@ set_setting_value('infill_percentage_0',5)
 
 set_brush_color(1,0,1,0)
 set_setting_value('infill_percentage_1',100)
-set_setting_value('enable_ironing_1',true)
+set_setting_value('enable_ironing_1',false)
 
 -- position the holder
 
-halfthick=2
+halfthick=1.5
 sbox=load_centered_on_plate('pot.stl')
 sbox=scale(15/10)*sbox
 
