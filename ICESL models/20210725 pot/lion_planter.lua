@@ -3,7 +3,7 @@
 -- print settings
 set_setting_value('use_different_thickness_first_layer',false)
 --set_setting_value('z_layer_height_first_layer_mm',0.2)
-set_setting_value('z_layer_height_mm',0.301)
+set_setting_value('z_layer_height_mm',0.25)
 set_setting_value('gen_supports',false)
 set_setting_value('add_brim',false)
 
@@ -12,14 +12,15 @@ set_setting_value('infill_percentage_0',5)
 
 set_brush_color(1,0,1,0)
 set_setting_value('infill_percentage_1',100)
-set_setting_value('enable_ironing_1',false)
+--set_setting_value('enable_ironing_1',false)
 
 ----------------------------------------------
 
 -- Load the planeter model
 
 sbox=load_centered_on_plate('pot.stl')
-sboxsize=125/100
+-- 1.0 = small, 1.25 = medium, 1.5 = large
+sboxsize=1.5
 sbox=scale(sboxsize)*sbox
 ss=bbox(sbox):extent()
 
@@ -42,7 +43,7 @@ function sbase(off,z)
   return base
 end
 
-halfthick=30/10
+halfthick=2.0
 gap=0.5
 base=difference(
   sbase(halfthick+gap,2*halfthick),
