@@ -3,7 +3,7 @@
 -- print settings
 set_setting_value('use_different_thickness_first_layer',false)
 --set_setting_value('z_layer_height_first_layer_mm',0.2)
-set_setting_value('z_layer_height_mm',3/10)
+set_setting_value('z_layer_height_mm',0.301)
 set_setting_value('gen_supports',false)
 set_setting_value('add_brim',false)
 
