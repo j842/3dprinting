@@ -14,20 +14,21 @@ set_brush_color(1,0,1,0)
 set_setting_value('infill_percentage_1',100)
 set_setting_value('enable_ironing_1',false)
 
--- position the holder
+----------------------------------------------
 
-sboxsize=15/10
+-- Load the planeter model
 
-halfthick=15/10
 sbox=load_centered_on_plate('pot.stl')
+--sboxsize=15/10
 --sbox=scale(sboxsize)*sbox
 ss=bbox(sbox):extent()
 
 
-function sbase(off)
+-- Base for planter
+
+function sbase(off,z)
   local w=2*off+ss.x
   local ws=2*off+ss.y-ss.x
-  local z=2*halfthick
   local base=cube(w,w,z)
   local r=4*ws/6
   base=union(
@@ -41,28 +42,16 @@ function sbase(off)
   return base
 end
 
-base=sbase(5)
-
-
-
---basecube=cube(2*ss.x,2*ss.y,halfthick*2)
---sbase=intersection(basecube,scale(1,1,10)*sbox)
---w=5
--- wiggle around the planter to create a boundary.
---basecube=intersection(basecube,
--- union({
---   translate(w,w,0)*sbase,
---   translate(-w,-w,0)*sbase,
---   translate(-w,w,0)*sbase,
---   translate(w,-w,0)*sbase,
---   translate(0,-1.05*w,0)*sbase
--- })
--- )
-
---base=difference(intersection(basecube,scale(1.2,1.1,1)*sbase),
---  translate(0,0,halfthick)*scale(1.04,1.02,1)*sbase)
-
---emit(sbase)
+halfthick=15/10
+base=difference(
+  sbase(4,2*halfthick),
+  translate(0,0,halfthick)*sbase(1,halfthick)
+)
 
 emit(base,1)
-emit(translate(0,0,halfthick)*sbox,0)
+
+
+-- Planter itself
+offsetplanter=translate(0,0,halfthick)*sbox
+--emit(offsetplanter,0)
+--emit(sbox)
