@@ -19,8 +19,8 @@ set_setting_value('enable_ironing_1',false)
 -- Load the planeter model
 
 sbox=load_centered_on_plate('pot.stl')
---sboxsize=15/10
---sbox=scale(sboxsize)*sbox
+sboxsize=125/100
+sbox=scale(sboxsize)*sbox
 ss=bbox(sbox):extent()
 
 
@@ -42,10 +42,11 @@ function sbase(off,z)
   return base
 end
 
-halfthick=15/10
+halfthick=30/10
+gap=0.5
 base=difference(
-  sbase(4,2*halfthick),
-  translate(0,0,halfthick)*sbase(1,halfthick)
+  sbase(halfthick+gap,2*halfthick),
+  translate(0,0,halfthick)*sbase(gap,halfthick)
 )
 
 emit(base,1)
