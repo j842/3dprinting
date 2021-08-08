@@ -18,28 +18,6 @@ set_setting_value('infill_percentage_0',100)
 set_brush_color(1,0,1,0)
 set_setting_value('infill_percentage_1',20)
 
-----------------------------------------------
-
--- Dual Clip
-
-clip=load_centered_on_plate('HeavyShortDualClip.stl')
-
-inner=union({
-  cylinder(2.05,7),
-  translate(0,0,8)*cylinder(2.05,7),
-  cylinder(1.25,15)
-})
-holes=difference(cylinder(6,15),inner)
-holes=rotate(90,X)*holes
-holes=translate(12.5,60.5,29.5)*holes
-holes=union(holes,mirror(X)*holes)
-
-clip=difference(clip,holes)
-
-x=translate(-60,0,0)
-
---emit(x*holes,0)
---emit(x*clip,1)
 
 
 -------------------------------------------
@@ -49,8 +27,15 @@ end
 
 function getlegbox()
   local d=legdim()
-  legbox=translate(3-d.x/2,-d.y/2,0)*cube(d.x,d.y,d.z)
+  local legbox=translate(3-d.x/2,-d.y/2,0)*cube(d.x,d.y,d.z)
   return legbox
+end
+
+function getholebox()
+  local d=legdim()
+  local l=10
+  local holebox=translate(3-d.x/2,-45+l/2,0)*cube(d.x,l,d.z)
+  return holebox
 end
 
 function getleg(l,p)
@@ -81,19 +66,47 @@ end
 
 
 ---
-part2=load_centered_on_plate('Filament_Guide_Holder.stl')
-part2=rotate(90,Z)*part2
-cs=bbox(part2):extent()
+part2a=load_centered_on_plate('Filament_Guide_Holder.stl')
+part2a=rotate(90,Z)*part2a
+cs=bbox(part2a):extent()
 -- 7,15
 
 defaultleg=getlegbox()
-leg1=getleg(70,part2)
-leg2=getleg(150,part2)
+leg1=getleg(70,part2a)
+leg2=getleg(150,part2a)
 
-part2=difference(part2,defaultleg)
+part2=difference(part2a,defaultleg)
 part2=union(part2,translate(4,0,0)*leg1)
 part2=union(part2,translate(-3,0,0)*leg2)
 part2=jshapes.xycenter(part2)
 
 
 emit(part2,1)
+
+
+
+----------------------------------------------
+
+-- Dual Clip
+
+clip=load_centered_on_plate('HeavyShortDualClip.stl')
+
+-- use the 4mm nice PFTE holes
+nicehole=intersection(part2a,getholebox())
+ops=rotate(270,X)*mirror(Z)
+nicehole=jshapes.xycenter(ops*nicehole)
+holes=translate(12.5,60.5-8,29.5-6)*nicehole
+holes=union(holes,mirror(X)*holes)
+
+-- thin the zip tie region
+thinrect=translate(-20,-30,9)*cube(10,62,30)
+thinrect=union(thinrect,mirror(X)*thinrect)
+clip=difference(clip,thinrect)
+
+clip=difference(clip,holes)
+
+x=translate(-60,0,0)
+
+emit(x*holes,0)
+emit(x*clip,1)
+
