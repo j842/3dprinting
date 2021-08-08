@@ -38,8 +38,8 @@ clip=difference(clip,holes)
 
 x=translate(-60,0,0)
 
-emit(x*holes,0)
-emit(x*clip,1)
+--emit(x*holes,0)
+--emit(x*clip,1)
 
 
 -------------------------------------------
