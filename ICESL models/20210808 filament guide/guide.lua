@@ -18,6 +18,8 @@ set_setting_value('infill_percentage_0',100)
 set_brush_color(1,0,1,0)
 set_setting_value('infill_percentage_1',20)
 
+set_brush_color(2,1,1,0)
+set_setting_value('infill_percentage_2',40)
 
 
 -------------------------------------------
@@ -53,14 +55,23 @@ function getleg(l,p)
   local leg2=intersection(p,legbox2)
   local leg3=intersection(p,legbox3)
 
-  s=(l-y + y2)/y2
-  ym1 = bbox(leg2):max_corner().y
+  local s=(l-y + y2)/y2
+  local ym1 = bbox(leg2):max_corner().y
   leg2=scale(1,1.01*s,1)*leg2
-  ym2 = bbox(leg2):max_corner().y
+  local ym2 = bbox(leg2):max_corner().y
   leg2=translate(0,ym1-ym2,0)*leg2
   leg3=translate(0,y-l,0)*leg3
 
-  return union({leg1,leg2,leg3})
+  local fullleg=union({leg1,leg2,leg3})
+  
+-- make thicker for strength
+  local skip=l-7.4
+  fullleg=union(fullleg,
+    translate(-3,-skip/2,0)*
+      difference(cube(8,skip,8),cube(3.5,skip,8))
+  )
+
+  return fullleg
 end
 -------------------------------------------
 
@@ -81,7 +92,7 @@ part2=union(part2,translate(-3,0,0)*leg2)
 part2=jshapes.xycenter(part2)
 
 
-emit(part2,1)
+emit(part2,2)
 
 
 
@@ -107,6 +118,6 @@ clip=difference(clip,holes)
 
 x=translate(-60,0,0)
 
-emit(x*holes,0)
-emit(x*clip,1)
+--emit(x*holes,0)
+--emit(x*clip,1)
 
