@@ -92,7 +92,7 @@ part2=union(part2,translate(-3,0,0)*leg2)
 part2=jshapes.xycenter(part2)
 
 
-emit(part2,2)
+--emit(part2,2)
 
 
 
@@ -118,6 +118,6 @@ clip=difference(clip,holes)
 
 x=translate(-60,0,0)
 
---emit(x*holes,0)
---emit(x*clip,1)
+emit(x*holes,0)
+emit(x*clip,1)
 

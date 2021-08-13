@@ -1,18 +1,24 @@
 -- Lion Planter
 
+printplanter=true
+printbase=false
+
+---------------------------------------
+
 -- print settings
-set_setting_value('use_different_thickness_first_layer',false)
---set_setting_value('z_layer_height_first_layer_mm',0.2)
+set_setting_value('use_different_thickness_first_layer',true)
+set_setting_value('z_layer_height_first_layer_mm',0.3)
 set_setting_value('z_layer_height_mm',0.3)
 set_setting_value('gen_supports',false)
 set_setting_value('add_brim',false)
 
 set_brush_color (0,.1,.5,.5)
 set_setting_value('infill_percentage_0',5)
+set_setting_value('cover_thickness_mm_0',1.5)
 
 set_brush_color(1,0,1,0)
 set_setting_value('infill_percentage_1',100)
---set_setting_value('enable_ironing_1',false)
+set_setting_value('cover_thickness_mm_0',1.2)
 
 ----------------------------------------------
 
@@ -20,7 +26,7 @@ set_setting_value('infill_percentage_1',100)
 
 sbox=load_centered_on_plate('pot.stl')
 -- 1.0 = small, 1.25 = medium, 1.5 = large
-sboxsize=1.5
+sboxsize=2.0
 sbox=scale(sboxsize)*sbox
 ss=bbox(sbox):extent()
 
@@ -49,11 +55,26 @@ base=difference(
   sbase(halfthick+gap,2*halfthick),
   translate(0,0,halfthick)*sbase(gap,halfthick)
 )
+-------------------------------------------------
 
-emit(base,1)
+-- rotate so can print big
+
+base=rotate(90,Z)*base
+
+if (printbase) then
+  -- move planter above base.
+  sbox=translate(0,0,halfthick)*sbox
+end
+sbox=rotate(90,Z)*sbox
+
+-- emit parts
+-- base
+if (printbase) then
+  emit(base,1)
+end
+-- planter
+if (printplanter) then
+  emit(sbox,0)
+end
 
 
--- Planter itself
-offsetplanter=translate(0,0,halfthick)*sbox
---emit(offsetplanter,0)
---emit(sbox)
