@@ -77,6 +77,9 @@ function leafy(sc)
     translate(0,-t/2,t)*cube(shw,sht,shh),
     translate(0,0,t+shh)*
     rotate(90,X)*cylinder(shw/2,sht))
+
+  spouthole=intersection(spouthole,
+    translate(0,0,t)*cube(shw,sht,h/3))
   
   p=difference(union(p,spout),spouthole)
 
