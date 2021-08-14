@@ -86,11 +86,20 @@ function leafy(sc)
 
   -- inside water filter bit
   spr=0.8*kw
-  spt=2*(1+k)/2
+  spt=1.5*k
   wf=difference(sphere(spr,v(0,0,0)),sphere(spr-spt,v(0,0,0)))
   wf=translate(0,0,spr)*wf
   wf=intersection(wf,cube(kw-t/2,kw-t/2,h))
   wf=translate(0,-kw/2,6*k)*wf
+
+  ad=360/10
+  for a=0,360,ad do
+    wf=difference(wf,
+      translate(0,-kw/2,0)*rotate(a,Z)*translate(0,-8*k,0)*rotate(45,X)*cylinder(spt,kw))
+    wf=difference(wf,
+      translate(0,-kw/2,0)*rotate(a+0.5*ad,Z)*translate(0,-15*k,0)*rotate(45,X)*cylinder(spt,kw))
+  end
+
 
   p=union(p,wf)
 
