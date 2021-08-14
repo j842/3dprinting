@@ -3,6 +3,12 @@
 printplanter=true
 printbase=false
 
+---
+
+
+package.path = package.path .. ";../common/?.lua"
+jshapes=require("jshapes")
+
 ---------------------------------------
 
 -- print settings
@@ -64,15 +70,26 @@ function leafy(sc)
       )
     )
 
-  shw=0.8*(2*r-2*t)
+  shw=0.7*(2*r-2*t)
   sht=t+1
-  shh=0.5*h/4
+  shh=0.4*h/4
   spouthole=union(
     translate(0,-t/2,t)*cube(shw,sht,shh),
     translate(0,0,t+shh)*
     rotate(90,X)*cylinder(shw/2,sht))
   
   p=difference(union(p,spout),spouthole)
+
+
+  -- inside water filter bit
+  spr=0.8*kw
+  spt=2*(1+k)/2
+  wf=difference(sphere(spr,v(0,0,0)),sphere(spr-spt,v(0,0,0)))
+  wf=translate(0,0,spr)*wf
+  wf=intersection(wf,cube(kw-t/2,kw-t/2,h))
+  wf=translate(0,-kw/2,6*k)*wf
+
+  p=union(p,wf)
 
 
   -- lion
@@ -86,12 +103,40 @@ function leafy(sc)
   p=union(p,leaf)
 
   -- leaves (embossed on back and sides)
-  leaf2=translate(0,-kw,0)*leaf
+  leaf2=scale(0.45,1,0.3)*translate(0,-kw,0)*leaf
   p=difference(p,leaf2)
   leaf3=translate(kw/2,-kw/2,0)*rotate(90,Z)*leaf
   leaf3=union(leaf3,mirror(X)*leaf3)
   p=difference(p,leaf3)
+
+-- letters on back
+
+function getletters(str,zf)
+    local texth=10*k
+    local f=font(Path..'../ttf/Chocolate.ttf')
+    local letters=jshapes.xycenter(f:str(str,1))
+    local e = bbox(letters):extent()
+    local factor = texth/e.y*zf
+    letters=scale(factor,factor,0.3/e.z)*letters
+    letters=rotate(90,X)*letters
+    return letters
+    end
+
+
+    letters=union({
+        translate(0,-kw,1.5*15*k+kw/2)*
+          getletters('Poipoia',1),
+        translate(0,-kw,0.5*15*k+kw/2)*
+          getletters('te   Kakano',0.6),
+        translate(0,-kw,-0.6*15*k+kw/2)*
+          getletters('Kia puawai',1)
+})
+
+
+    p=union(p,letters)    
+
+
+--------------------------------------------
+
   emit(p)
 
---  emit(flion(1))
--- emit(leafy(1))
