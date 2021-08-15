@@ -4,7 +4,7 @@ printplanter=true
 printbase=true
 
 --- Scale factor - determines size of lion.
-  k=1
+  k=2
 ---
 
 
@@ -20,13 +20,20 @@ set_setting_value('z_layer_height_mm',0.2)
 set_setting_value('gen_supports',false)
 set_setting_value('add_brim',false)
 
+-- planter brush
 set_brush_color (0,.1,.3,.5)
 set_setting_value('infill_percentage_0',100)
 set_setting_value('cover_thickness_mm_0',1.2)
 
-set_brush_color(1,0,1,0)
-set_setting_value('infill_percentage_1',100)
-set_setting_value('cover_thickness_mm_0',1.2)
+-- extra nodules brush (e.g. lion head)
+set_brush_color(1,.1,.2,.5)
+set_setting_value('infill_percentage_1',5)
+set_setting_value('cover_thickness_mm_1',1.5)
+
+-- base brush
+set_brush_color(2,0,1,0)
+set_setting_value('infill_percentage_2',100)
+set_setting_value('cover_thickness_mm_2',1.2)
 
 
 ----------------------------------------------
@@ -129,8 +136,7 @@ end
 --------------------------------------
 
   -- lion
-  p=union(p,
-      translate(0,0,2*h/3)*rotate(270,X)*rotate(180,Z)*flion(k))
+  pn=translate(0,0,2*h/3)*rotate(270,X)*rotate(180,Z)*flion(k)
 
 
   -- leaves (protruding on front)
@@ -179,18 +185,20 @@ end
 
   p=rotate(90,Z)*p
   b=rotate(90,Z)*b
---  p=jshapes.xycenter(p)
+  pn=rotate(90,Z)*pn
 
   if (printbase) then
     -- move planter above base.
     p=translate(0,0,t)*p
+    pn=translate(0,0,t)*pn
   end
 
   if (printplanter) then
     emit(p,0)
+    emit(pn,1)
   end
   if (printbase) then
-    emit(b,1)
+    emit(b,2)
   end
 
   
