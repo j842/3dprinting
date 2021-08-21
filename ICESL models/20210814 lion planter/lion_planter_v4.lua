@@ -43,7 +43,7 @@ set_setting_value('cover_thickness_mm_2',1.2)
   w=80
   h=k*80
   kw=k*w
-  r=kw/5
+  r=kw/6.5
 ----------------------------------------------
 
 
