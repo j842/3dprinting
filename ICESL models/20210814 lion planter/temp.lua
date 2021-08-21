@@ -1,10 +1,10 @@
 -- Lion Planter
 
-printplanter=true
-printbase=false
+printplanter=false
+printbase=true
 
 --- Scale factor - determines size of lion.
-  k=2
+  k=1
 ---
 
 
@@ -104,13 +104,6 @@ end
     return sh
   end
 
-  function cylinderz(a,kfac,aoff)
-    local wf = 
-      translate(0,-kw/2,0)*rotate(a+aoff,Z)*
-      translate(0,-kfac*k,0)*cylinder(1.1*t,kw)
-    return wf
-  end
-
 
   function permeablebase()
     -- curved holed inside water filter bit
@@ -125,9 +118,10 @@ end
 
     ad=360/10
     for a=0,360,ad do
-      wf=difference(wf,cylinderz(a,26.2,0.5*ad))
-      wf=difference(wf,cylinderz(a,30,0))
-      wf=difference(wf,cylinderz(a,35,0.5*ad))
+      wf=difference(wf,
+        translate(0,-kw/2,0)*rotate(a,Z)*translate(0,-30*k,0)*cylinder(t,kw))
+      wf=difference(wf,
+        translate(0,-kw/2,0)*rotate(a+0.5*ad,Z)*translate(0,-35*k,0)*cylinder(t,kw))
     end
     return wf
   end
@@ -205,6 +199,7 @@ end
   end
   if (printbase) then
     emit(b,2)
+    emit(translate(0,95,0)*b,2)
   end
 
   
