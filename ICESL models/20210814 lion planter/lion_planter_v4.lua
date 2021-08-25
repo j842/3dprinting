@@ -1,10 +1,10 @@
 -- Lion Planter
 
-printplanter=true
-printbase=false
+printplanter=false
+printbase=true
 
 --- Scale factor - determines size of lion.
-  k=2
+  k=1.5
 ---
 
 
