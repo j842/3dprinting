@@ -14,7 +14,7 @@ set_setting_value('infill_percentage_0',5)
 set_setting_value('cover_thickness_mm_0',1.5)
 
 set_brush_color(1,0,1,0)
-set_setting_value('infill_percentage_1',100)
+set_setting_value('infill_percentage_1',20)
 set_setting_value('cover_thickness_mm_0',1.2)
 
 ----------------------------------------------
@@ -62,7 +62,10 @@ function pikachu()
   local tail=difference(sbox,box)
 
   tail=scale(5,1,1)*tail
-  tail=intersection(cube(maxtailw,100,100),tail)
+  tail=intersection(cube(0.99*maxtailw,100,100),tail)
+
+  body=scale(1.6)*body
+  tail=scale(1.6)*tail
 
   return {body,tail}
 end
@@ -70,7 +73,7 @@ end
 p=pikachu()
 
 body=jshapes.xycenter(p[1])
-tail=translate(50,0,0)*jshapes.xycenter(
+tail=translate(70,0,0)*jshapes.xycenter(
     rotate(90,Y)*p[2]
   )
 
