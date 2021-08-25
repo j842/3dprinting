@@ -48,6 +48,16 @@ function pikachu()
       body,eye,mirror(X)*eye
       })
 
+  local mt=4
+  local mouth =scale(0.8,1.2,1)* 
+      intersection({cube(15,15,mt),
+        difference(cube(15,15,mt),
+          translate(-4,10,0)*cylinder(9,mt)),
+        translate(-3,1,0)*cylinder(5,mt)})
+  body=difference(body,
+          translate(2.5,7,54)*rotate(35,X)*mouth)
+
+
   local tail=difference(sbox,box)
 
   tail=scale(5,1,1)*tail
