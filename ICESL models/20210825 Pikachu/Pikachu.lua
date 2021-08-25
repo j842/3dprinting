@@ -40,11 +40,12 @@ function pikachu()
   )
   local body=intersection(sbox,box)
 
-  local eye=translate(4.5,19,49.2)*
-    rotate(-35,X)*rotate(18,Y)*
+  local eye=translate(5.5,17,50)*
+    rotate(-35,X)*rotate(19,Y)*
     difference(cylinder(2.5,1),
-    translate(0.7,0.6,0.7)*cylinder(1.2,.3))
-  body=union({
+    translate(-0.3,0.7,0.4)*cylinder(1.2,.3))
+
+  body=difference({
       body,eye,mirror(X)*eye
       })
 
