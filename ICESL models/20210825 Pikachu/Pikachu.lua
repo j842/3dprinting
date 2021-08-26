@@ -1,6 +1,8 @@
 package.path = package.path .. ";../common/?.lua"
 jshapes=require("jshapes")
 
+debug=false
+
 
 -- print settings
 set_setting_value('use_different_thickness_first_layer',true)
@@ -21,6 +23,14 @@ set_setting_value('cover_thickness_mm_0',1.2)
 
 maxtailw=2
 
+function scaleinplace(obj,sf)
+  local bb=bbox(obj):center()
+  return translate(bb)*
+            scale(sf)*
+            translate(-bb)*
+            obj
+end
+
 function pikachu()
   local sbox=load_centered_on_plate('Pikachu.stl')
   -- 1.0 = small, 1.25 = medium, 1.5 = large
@@ -28,22 +38,29 @@ function pikachu()
   sbox=scale(sboxsize)*sbox
   local ss=bbox(sbox):extent()
 
+  local insert1=
+    translate(0,6.25,27)*cube(maxtailw,2,10)
+  local insert2=
+    translate(0,-19,23)*cube(maxtailw,2.5,10)
+
   local box=difference(
     translate(0,0,25)*cube(ss.x+1,ss.y+1,35),
     union({
-    translate(0,6.25,19.05)*cube(maxtailw,3,15),
     translate(0,6.25,18.9)*cube(1,3,10),
-    translate(0,6,18)*cube(2,8,10),
-    translate(0,-19,18.88)*cube(maxtailw,3,15)
+    translate(0,6,18)*cube(2,8,10)
   }
     )
   )
   local body=intersection(sbox,box)
+  body=difference({body,
+      scaleinplace(insert1,1.3),
+      scaleinplace(insert2,1.3)
+})
 
   local eye=translate(5.5,17,50)*
     rotate(-35,X)*rotate(19,Y)*
     difference(cylinder(2.5,1),
-    translate(-0.3,0.7,0.4)*cylinder(1.2,.3))
+    translate(-0.3,0.7,0)*cylinder(1.2,.3))
 
   body=difference({
       body,eye,mirror(X)*eye
@@ -63,6 +80,7 @@ function pikachu()
 
   tail=scale(5,1,1)*tail
   tail=intersection(cube(0.99*maxtailw,100,100),tail)
+  tail=union({tail,insert1,insert2})
 
   body=scale(1.6)*body
   tail=scale(1.6)*tail
@@ -72,10 +90,15 @@ end
 
 p=pikachu()
 
-body=jshapes.xycenter(p[1])
-tail=translate(70,0,0)*jshapes.xycenter(
-    rotate(90,Y)*p[2]
-  )
+if (debug) then
+  body=p[1]
+  tail=p[2]
+else
+  body=jshapes.xycenter(p[1])
+  tail=translate(70,0,0)*jshapes.xycenter(
+     rotate(90,Y)*p[2]
+   )
+end
 
 emit(body,0)
 emit(tail,1)
