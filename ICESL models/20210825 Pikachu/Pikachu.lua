@@ -33,7 +33,6 @@ end
 
 function pikachu()
   local sbox=load_centered_on_plate('Pikachu.stl')
-  -- 1.0 = small, 1.25 = medium, 1.5 = large
   local sboxsize=50
   sbox=scale(sboxsize)*sbox
   local ss=bbox(sbox):extent()
@@ -53,8 +52,8 @@ function pikachu()
   )
   local body=intersection(sbox,box)
   body=difference({body,
-      scaleinplace(insert1,1.3),
-      scaleinplace(insert2,1.3)
+      scaleinplace(insert1,1.2),
+      scaleinplace(insert2,1.2)
 })
 
   local eye=translate(5.5,17,50)*
@@ -79,7 +78,7 @@ function pikachu()
   local tail=difference(sbox,box)
 
   tail=scale(5,1,1)*tail
-  tail=intersection(cube(0.99*maxtailw,100,100),tail)
+  tail=intersection(cube(maxtailw,100,100),tail)
   tail=union({tail,insert1,insert2})
 
   body=scale(1.6)*body
