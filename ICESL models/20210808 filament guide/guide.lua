@@ -1,6 +1,15 @@
 -- Dual filament guide
 -- based on https://www.thingiverse.com/thing:3377145
 
+---------------------------------
+
+
+showclippart=true
+showarm=false
+
+---------------------------------
+
+
 
 package.path = package.path .. ";../common/?.lua"
 jshapes=require("jshapes")
@@ -91,9 +100,9 @@ part2=union(part2,translate(4,0,0)*leg1)
 part2=union(part2,translate(-3,0,0)*leg2)
 part2=jshapes.xycenter(part2)
 
-
---emit(part2,2)
-
+if (showarm) then
+  emit(part2,2)
+end
 
 
 ----------------------------------------------
@@ -114,10 +123,15 @@ thinrect=translate(-20,-30,9)*cube(10,62,30)
 thinrect=union(thinrect,mirror(X)*thinrect)
 clip=difference(clip,thinrect)
 
+thinrect=translate(-15,-10,11)*cube(32,110,5)
+thinrect=union(thinrect,mirror(X)*thinrect)
+clip=difference(clip,thinrect)
+
 clip=difference(clip,holes)
 
 x=translate(-60,0,0)
 
-emit(x*holes,0)
-emit(x*clip,1)
-
+if (showclippart) then
+  emit(x*holes,0)
+  emit(x*clip,1)
+end
