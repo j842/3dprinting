@@ -21,7 +21,7 @@ set_setting_value('infill_percentage_0',20)
 ----------------------------------------------
 
 
-l=80
+l=110
 
 
 iholder=rotate(90,Z)*load_centered_on_plate('insert.stl')
