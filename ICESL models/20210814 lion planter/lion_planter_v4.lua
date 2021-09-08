@@ -3,10 +3,11 @@
 printplanter=false
 printbase=true
 
+debug=false
+
 --- Scale factor - determines size of lion.
   k=1.5
 ---
-
 
 package.path = package.path .. ";../common/?.lua"
 jshapes=require("jshapes")
@@ -26,7 +27,7 @@ set_setting_value('infill_percentage_0',100)
 set_setting_value('cover_thickness_mm_0',1.2)
 
 -- extra nodules brush (e.g. lion head)
-set_brush_color(1,.1,.2,.5)
+set_brush_color(1,.1,.2,.7)
 set_setting_value('infill_percentage_1',5)
 set_setting_value('cover_thickness_mm_1',1.5)
 
@@ -82,9 +83,9 @@ end
  -- baseshape, with walls adjusted by offset (inwards)
   function baseshape(off)
     local bs=union({
-      translate(0,-kw/2,off)*cube(kw-2*off,kw-2*off,h-off),
-      translate(0,r/2,off)*cube(2*r-2*off,r,h/3-off),
-      translate(0,r,off)*cylinder(r-off,h/3-off)
+      translate(0,-kw/2,0)*cube(kw-2*off,kw-2*off,h-off),
+      translate(0,r/2,0)*cube(2*r-2*off,r,h/3-off),
+      translate(0,r,0)*cylinder(r-off,h/3-off)
     })
     return bs
   end
@@ -135,8 +136,7 @@ end
 
 --------------------------------------
 
-  p=difference({baseshape(0),baseshape(t),spouthole()})
-
+  p=difference({baseshape(0),translate(0,0,t)*baseshape(t),spouthole()})
   p=union(p,permeablebase())
 
 --------------------------------------
@@ -179,13 +179,12 @@ end
   bs=baseshape(-t)
   be=bbox(bs):extent()
   bc=bbox(bs):center()
+  bsgap=0.5
   b=difference(
-    translate(bc.x,bc.y,0)*ccube(be.x+2*t,be.y+2*t,3*t),
-    baseshape(-0.5)
+    translate(bc.x,bc.y,0)*cube(be.x+2*t,be.y+2*t,3*t),
+    translate(0,0,t)*baseshape(-bsgap)
   )
-
   b=intersection(b, baseshape(-2*t))
-
 --------------------------------------------
 
 
@@ -194,9 +193,14 @@ end
   pn=rotate(90,Z)*pn
 
   if (printbase) then
-    -- move planter above base.
-    p=translate(0,0,t)*p
-    pn=translate(0,0,t)*pn
+    if (debug) then
+      -- move planter above base.
+      p=translate(0,0,t)*p
+      pn=translate(0,0,t)*pn
+    else
+      p=translate(0,kw+2*t+3,0)*p
+      pn=translate(0,kw+2*t+3,0)*pn      
+    end
   end
 
   if (printplanter) then
