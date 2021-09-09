@@ -57,9 +57,9 @@ function bar(z)
 end
 
 ----------------------------------------------
-function lightoutline()
+function lightoutline(z)
  local rad=22
- return translate(0,-3,0)*cylinder(rad,h/2)
+ return translate(0,-3,0)*cylinder(rad,z)
 end
 
 function grabber(z)
@@ -75,34 +75,24 @@ function grabber(z)
   })
   lighthole=union(lighthole,mirror(v(1,0,0))*lighthole)
 
-  voff=v(l,20,0)
-  local c= lightoutline()
-  lighthole=difference(lighthole,translate(voff)*c)
+  local c= lightoutline(z)
   lighthole=difference(c,lighthole)
-  lighthole=translate(voff)*lighthole
   return lighthole
 end
 ----------------------------------------------
 
 
-grab=union({
-  rail(h),
-  bar(h/2),
-  grabber(h/2)
-})
+voff=v(l,20,0)
+uniholder=union(
+    translate(voff)*grabber(h/2),
+    difference(
+      union(rail(h),bar(h/2)),
+      translate(voff)*lightoutline(h/2)
+    )
+  )
 
-emit(grab)
--- voff=v(l,20,0)
--- rad=22
--- c=translate(0,-3,0)*cylinder(rad,h/2)
--- grab=difference(grab,translate(voff)*c)
--- --c=difference(c,grab)
--- --c=translate(voff)*c
--- holder=grab
-
--- holder=union(holder,translate(51,40,0)*mirror(X)*holder)
-
--- emit(holder)
+holders=union(uniholder,translate(51,40,0)*mirror(X)*uniholder)
+emit(holders)
 
 
 
