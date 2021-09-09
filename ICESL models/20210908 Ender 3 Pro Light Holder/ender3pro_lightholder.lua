@@ -20,63 +20,89 @@ set_setting_value('infill_percentage_0',20)
 
 ----------------------------------------------
 
+function xycenter(objtocenter)
+  local v=bbox(objtocenter):center()
+  objtocenter=translate(-v.x,-v.y,-v.z)*objtocenter
+  local h=bbox(objtocenter):min_corner().z
+  return translate(0,0,-h)*objtocenter
+end
+----------------------------------------------
+
 
 l=110
+h=20
 
+----------------------------------------------
+function rail(z)
+  local iholder=xycenter(rotate(90,X)*rotate(90,Y)*load_centered_on_plate('rail.stl'))
 
-iholder=rotate(90,Z)*load_centered_on_plate('insert.stl')
-z=bbox(iholder):extent().z
-iholder=scale(1,1,2)*iholder
-iholder=translate(
-  bbox(iholder):extent().x/2-1,-32,0)*iholder
-iholder=rotate(0,0,180)*iholder
-iholder=union(iholder,
-  translate(l/2,32,0)*
-cube(l,12,z))
-
-for cx=10,l-30,10 do
-  iholder=difference(iholder,
-    translate(cx,32,0)*cylinder(2,z))
+  iholder=scale(1,1,z/bbox(iholder):extent().z)*iholder
+  iholder=translate(
+    bbox(iholder):extent().x/2-1,-32,0)*iholder
+  iholder=rotate(0,0,180)*iholder
+  return iholder
 end
 
-bx=bbox(iholder):extent()
-x=bx.x
-y=bx.y
-z=bx.z/2
+----------------------------------------------
+-- add bar
+function bar(z)
+  local iholder=
+    translate(l/2,32,0)*
+  cube(l,12,h/2)
+  for cx=10,l-30,10 do
+    iholder=difference(iholder,
+      translate(cx,32,0)*cylinder(2,z))
+  end
+  return iholder
+end
 
-rad=22
+----------------------------------------------
+function lightoutline()
+ local rad=22
+ return translate(0,-3,0)*cylinder(rad,h/2)
+end
+
+function grabber(z)
+  local lr=36/2
+  local dy=-3
+  local lighthole=translate(0,dy,0)*intersection(cylinder(lr,z),translate(0,-lr/2,0)*cube(100,lr,z))
+
+  lighthole=union({lighthole,
+  translate(0,4+dy,0)*cube(14,18,z),
+  translate(-6,dy+1,0)*rotate(0,0,45)*cube(16,18,z),
+  translate(0,dy-1,0)*cube(36,5,z),
+  translate(0,-21,0)*cube(lr*2,10,z)
+  })
+  lighthole=union(lighthole,mirror(v(1,0,0))*lighthole)
+
+  voff=v(l,20,0)
+  local c= lightoutline()
+  lighthole=difference(lighthole,translate(voff)*c)
+  lighthole=difference(c,lighthole)
+  lighthole=translate(voff)*lighthole
+  return lighthole
+end
+----------------------------------------------
 
 
-voff=v(l,20,0)
-c=translate(0,-3,0)*cylinder(rad,z)
-iholder=difference(iholder,translate(voff)*c)
-
-
-lr=36/2
-dy=-3
-lighthole=translate(0,dy,0)*intersection(cylinder(lr,8),translate(0,-lr/2,0)*cube(100,lr,z))
-
-lighthole=union({lighthole,
-translate(0,4+dy,0)*cube(14,18,z),
-translate(-6,dy+1,0)*rotate(0,0,45)*cube(16,18,z),
-translate(0,dy-1,0)*cube(36,5,z),
-translate(0,-21,0)*cube(lr*2,10,z)
+grab=union({
+  rail(h),
+  bar(h/2),
+  grabber(h/2)
 })
-lighthole=union(lighthole,mirror(v(1,0,0))*lighthole)
 
---emit(lighthole)
+emit(grab)
+-- voff=v(l,20,0)
+-- rad=22
+-- c=translate(0,-3,0)*cylinder(rad,h/2)
+-- grab=difference(grab,translate(voff)*c)
+-- --c=difference(c,grab)
+-- --c=translate(voff)*c
+-- holder=grab
 
-c=difference(c,
-lighthole)
-c=translate(voff)*c
+-- holder=union(holder,translate(51,40,0)*mirror(X)*holder)
 
-
-holder=union(iholder,c)
-
---holder=difference(holder,translate(-50,0,0)*cube(200,200,z))
-holder=union(holder,translate(51,40,0)*mirror(X)*holder)
-
-emit(holder)
+-- emit(holder)
 
 
 
