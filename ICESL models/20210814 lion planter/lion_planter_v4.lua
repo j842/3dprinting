@@ -1,7 +1,7 @@
 -- Lion Planter
 
-printplanter=false
-printbase=true
+printplanter=true
+printbase=false
 
 debug=false
 
@@ -39,6 +39,9 @@ set_setting_value('cover_thickness_mm_2',1.2)
 
 ----------------------------------------------
 --- 
+  epsilon=0.001
+  opepsilon=1+epsilon
+  vepsilon=epsilon*v(1,1,1)
   t=1.5+k/2
   embosst=0.6
   w=80
@@ -52,7 +55,7 @@ function flion(sc)
     local lhead=load_centered_on_plate('lionhead.stl')
     local lhe=bbox(lhead):extent()
     lhead=intersection(lhead,
-      translate(0,0,3)*cube(lhe))
+      translate(0,0,3)*cube(opepsilon*lhe))
     lhead=jshapes.xycenter(lhead)
     lhead=scale(sc)*lhead
     return lhead
@@ -119,7 +122,7 @@ end
     local r1=kw
     local c0=v(0,0,t)
     local c1=v(0,0,t+r1-r0)
-    local wf=difference(cone(r0,r1,c0,c1),cone(r0-t,r1-t,c0,c1))
+    local wf=difference(cone(r0,r1,c0,c1),cone(r0-t,r1-t,c0-vepsilon,c1+vepsilon))
 
     wf=intersection(wf,cube(kw-t/2,kw-t/2,h))
     wf=translate(0,-kw/2,0)*wf
@@ -179,7 +182,7 @@ end
   bs=baseshape(-t)
   be=bbox(bs):extent()
   bc=bbox(bs):center()
-  bsgap=0.5
+  bsgap=0.5  -- 0.5mm gap between base and platner
   b=difference(
     translate(bc.x,bc.y,0)*cube(be.x+2*t,be.y+2*t,3*t),
     translate(0,0,t)*baseshape(-bsgap)
