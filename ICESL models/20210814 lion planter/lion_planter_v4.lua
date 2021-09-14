@@ -1,12 +1,12 @@
 -- Lion Planter
 
 printplanter=true
-printbase=false
+printbase=true
 
 debug=false
 
 --- Scale factor - determines size of lion.
-  k=1.5
+  k=1.25
 ---
 
 package.path = package.path .. ";../common/?.lua"
@@ -34,7 +34,7 @@ set_setting_value('cover_thickness_mm_1',1.5)
 -- base brush
 set_brush_color(2,0,1,0)
 set_setting_value('infill_percentage_2',100)
-set_setting_value('cover_thickness_mm_2',1.2)
+set_setting_value('cover_thickness_mm_2',1.2001)
 
 
 ----------------------------------------------
@@ -184,8 +184,10 @@ end
   bc=bbox(bs):center()
   bsgap=0.5  -- 0.5mm gap between base and platner
   b=difference(
-    translate(bc.x,bc.y,0)*cube(be.x+2*t,be.y+2*t,3*t),
-    translate(0,0,t)*baseshape(-bsgap)
+    translate(bc.x,bc.y,0)*
+      cube(be.x+2*t,be.y+2*t,3*t),
+    translate(0,0,t)*
+      baseshape(-bsgap)
   )
   b=intersection(b, baseshape(-2*t))
 --------------------------------------------
@@ -201,8 +203,8 @@ end
       p=translate(0,0,t)*p
       pn=translate(0,0,t)*pn
     else
-      p=translate(0,kw+2*t+3,0)*p
-      pn=translate(0,kw+2*t+3,0)*pn      
+      p=translate(0,kw+2*t+2,0)*p
+      pn=translate(0,kw+2*t+2,0)*pn      
     end
   end
 
