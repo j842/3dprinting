@@ -20,7 +20,7 @@ set_setting_value('cover_thickness_mm_1',1.5)
 
 x=load_centered_on_plate('DunedinNZColour_fixed.stl')
 base=3
-bb=1.01*bbox(x):extent()
+bb=bbox(x):extent()
 y=difference(x,translate(0,0,-20+base)*cube(bb.x,bb.y,20))
 y=translate(0,0,-base)*y
 y=scale(1,1,2)*y
