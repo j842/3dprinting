@@ -32,4 +32,8 @@ pin=difference(pin,pincone)
 
 oventhing=union({base,pin})
 
-emit(oventhing)
+
+numpins=6
+for i=1,numpins,1 do
+  emit(translate(baser*3*i,0,0)*oventhing)
+end
