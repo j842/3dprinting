@@ -21,6 +21,8 @@ Personal projects - shared for friends.
 
 [Mini Bin files](ICESL%20models/20210606%20Mini%20Bathroom%20Bin)
 
- <img src="https://github.com/j842/3dprinting/blob/main/ICESL%20models/20210606%20Mini%20Bathroom%20Bin/model%20pic.jpg" height="250">   <img src="https://github.com/j842/3dprinting/blob/main/ICESL%20models/20210606%20Mini%20Bathroom%20Bin/model%20pic%20minibin_two.JPG" height="250">
+Uses any M4 bolt for the hinge.
+
+ <img src="https://github.com/j842/3dprinting/blob/main/ICESL%20models/20210606%20Mini%20Bathroom%20Bin/model%20pic.jpg" height="250">   <img src="https://github.com/j842/3dprinting/blob/main/ICESL%20models/20210606%20Mini%20Bathroom%20Bin/model%20pic%20minibin_two.JPG" height="250">  <img src="https://github.com/j842/3dprinting/blob/main/ICESL%20models/20210606%20Mini%20Bathroom%20Bin/model3.jpg" height="250">  <img src="https://github.com/j842/3dprinting/blob/main/ICESL%20models/20210606%20Mini%20Bathroom%20Bin/model4.jpg" height="250">
 
 
