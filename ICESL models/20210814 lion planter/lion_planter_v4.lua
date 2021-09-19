@@ -3,7 +3,7 @@
 printplanter=true
 printbase=true
 
-debug=false
+debug=true
 
 --- Scale factor - determines size of lion.
   k=1.25

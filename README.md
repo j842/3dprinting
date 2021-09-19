@@ -9,3 +9,10 @@ Personal projects - shared for friends.
 
 <img src="https://github.com/j842/3dprinting/blob/main/ICESL%20models/20210814%20lion%20planter/planter1.JPG" height="250"> <img src="https://github.com/j842/3dprinting/blob/main/ICESL%20models/20210814%20lion%20planter/planter2.jpg" height="250"> <img src="https://github.com/j842/3dprinting/blob/main/ICESL%20models/20210814%20lion%20planter/planter3.jpg" height="250"> <img src="https://github.com/j842/3dprinting/blob/main/ICESL%20models/20210814%20lion%20planter/planter4.JPG" height="250"> <img src="https://github.com/j842/3dprinting/blob/main/ICESL%20models/20210814%20lion%20planter/planter5.jpg" height="250"> 
 
+
+## Adjustable laptop stand
+
+[Laptop Stand files](ICESL%20models/20210918%20Laptop%20Stand)
+
+<img src="https://github.com/j842/3dprinting/blob/main/ICESL%20models/20210918%20Laptop%20Stand/stand1.jpg" height="250">   <img src="https://github.com/j842/3dprinting/blob/main/ICESL%20models/20210918%20Laptop%20Stand/stand2.jpg" height="250">   <img src="https://github.com/j842/3dprinting/blob/main/ICESL%20models/20210918%20Laptop%20Stand/stand3.jpg" height="250">
+
