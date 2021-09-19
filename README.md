@@ -32,7 +32,7 @@ Uses any M4 bolt for the hinge.
 
 [Lolin files](ICESL%20models/20210713%20LolinNodeMCUv3)
 
- <img src="https://github.com/j842/3dprinting/blob/main/ICESL%20models/20210713%20LolinNodeMCUv3/holder.jpg" height="250">
+ <img src="https://github.com/j842/3dprinting/blob/main/ICESL%20models/20210713%20LolinNodeMCUv3/holder.jpg" height="250">    <img src="https://github.com/j842/3dprinting/blob/main/ICESL%20models/20210713%20LolinNodeMCUv3/holder2.jpg" height="250">    <img src="https://github.com/j842/3dprinting/blob/main/ICESL%20models/20210713%20LolinNodeMCUv3/holder3.jpg" height="250">
 
 
 ## Bike light holder for Tetrarack M2, with Enfitnix Cubelite II
