@@ -1,18 +1,17 @@
--- Lion Planter
+-- Lion Planter v4
 
+-- print just the base, just the planter, or both (if bed is big enough)
 printplanter=true
 printbase=true
 
-debug=true
+-- debug just shows them together.
+debug=false
 
---- Scale factor - determines size of lion.
+--- Scale factor - determines size of planter. 
+--- 1.0, 1.25, 1.5 and 1.95 all tested.
   k=1.25
 ---
 
-package.path = package.path .. ";../common/?.lua"
-jshapes=require("jshapes")
-
----------------------------------------
 
 -- print settings
 set_setting_value('use_different_thickness_first_layer',true)
@@ -51,19 +50,28 @@ set_setting_value('cover_thickness_mm_2',1.2001)
 ----------------------------------------------
 
 
+-- center in x and y, and place on z=0 surface.
+function xycenter(objtocenter)
+  local v=bbox(objtocenter):center()
+  objtocenter=translate(-v.x,-v.y,-v.z)*objtocenter
+  local h=bbox(objtocenter):min_corner().z
+  return translate(0,0,-h)*objtocenter
+end
+
+
 function flion(sc)
-    local lhead=load_centered_on_plate('lionhead.stl')
+    local lhead=load_centered_on_plate('stl/lionhead.stl')
     local lhe=bbox(lhead):extent()
     lhead=intersection(lhead,
       translate(0,0,3)*cube(opepsilon*lhe))
-    lhead=jshapes.xycenter(lhead)
+    lhead=xycenter(lhead)
     lhead=scale(sc)*lhead
     return lhead
   end
 
   
 function leafy(sc)
-    local lpot=load_centered_on_plate('leaf.stl')
+    local lpot=load_centered_on_plate('stl/leaf.stl')
     lz=bbox(lpot):extent().z
     -- scale to 0.3mm thick
     lpot=scale(sc,sc,embosst/lz)*lpot
@@ -74,7 +82,7 @@ function leafy(sc)
 function getletters(str,zf)
     local texth=10*k
     local f=font(Path..'../ttf/Chocolate.ttf')
-    local letters=jshapes.xycenter(f:str(str,1))
+    local letters=xycenter(f:str(str,1))
     local e = bbox(letters):extent()
     local factor = texth/e.y*zf
     letters=scale(factor,factor,embosst/e.z)*letters
