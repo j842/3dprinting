@@ -3,6 +3,8 @@
 
 Personal projects - shared for friends.
 
+These projects can be sliced to produce gcode, or converted to STLs, with [IceSL-Forge](https://icesl.loria.fr/download/) - a free download. IceSL can go straight from CSG (defined with lua scripts) to gcode without STL between - giving a lot of flexibility.
+
 ## Lion Planter
 
 [Lion Planter files](ICESL%20models/20210814%20lion%20planter)
