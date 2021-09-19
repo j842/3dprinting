@@ -1,16 +1,18 @@
 -- Bike clamp (Tetrarack M2, with Enfitnix Cubelite II)
--- one unit is 1mm
 
-package.path = package.path .. ";../../common/?.lua"
+package.path = package.path .. ";../common/?.lua"
 jshapes=require("jshapes")
 
 -- overall height - needs to be 24mm for holder to fit light
 height=25
 
--- how thick the bar it attaches to is, and how thick to make clamping ring
+-- how thick the bar it attaches to is
 barr=19/2
+
+-- add some room for a rubber pad inside the mount - make smaller if no/thinner rubber used.
 pad=2.8
 
+-- how thick to make clamping ring
 ringthick=7
 
 -- how far mounts stick out, depth of slot for the two parts to fit together
@@ -87,14 +89,14 @@ sring=difference(sring,edgecut)
 -- shift so right edge of tab is at x=0.
 barmount=translate(barr+ringthick+mountl,0,0)*sring
 
--- add letters (40mm high, 10mm deep). Manually placed.
-j=load('../../letters/letter_j.stl')
-e=load('../../letters/letter_e.stl')
-logo=scale(0.3)*mirror(v(1,0,0))*rotate(90,0,0)*union(j,translate(15,0,0)*e)
-logo=rotate(0,90,0)*logo
-logo=translate(32.5,17.5,5.5)*logo
+-- -- add letters (40mm high, 10mm deep). Manually placed.
+-- j=load('../letters/letter_j.stl')
+-- e=load('../letters/letter_e.stl')
+-- logo=scale(0.3)*mirror(v(1,0,0))*rotate(90,0,0)*union(j,translate(15,0,0)*e)
+-- logo=rotate(0,90,0)*logo
+-- logo=translate(32.5,17.5,5.5)*logo
 
-barmount=union(barmount,logo)
+-- barmount=union(barmount,logo)
 
 -------------------------------------------------------
 ------------ PART 2 - light holder --------------------
