@@ -35,4 +35,6 @@ Uses any M4 bolt for the hinge.
 
 ## Bike light holder for Tetrarack M2, with Enfitnix Cubelite II
 
-[Holder files](ICESL%20models/20210713%20LolinNodeMCUv3)
+[Holder files](ICESL%20models/20210604%20Rear%20Bike%20Light%20Holder)
+
+<img src="https://github.com/j842/3dprinting/blob/main/ICESL%20models/20210604%20Rear%20Bike%20Light%20Holder/holder1.JPG" height="250">   <img src="https://github.com/j842/3dprinting/blob/main/ICESL%20models/20210604%20Rear%20Bike%20Light%20Holder/holder2.JPG" height="250">  <img src="https://github.com/j842/3dprinting/blob/main/ICESL%20models/20210604%20Rear%20Bike%20Light%20Holder/holder3.JPG" height="250"> 
