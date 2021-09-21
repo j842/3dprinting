@@ -145,14 +145,15 @@ function lolinsize()
   function lolin.lolinv3mount(h)
     local ls=lolinsize()
     holer=3.2
-    local se = getpin((holer-0.2)/2,h,ls.z)
+    holedelta=0.2
+    local se = getpin((holer-holedelta)/2,h,ls.z)
     se=translate(
       -ls.x/2+holeoffset().x,
       -ls.y/2+holeoffset().y,0)*se
     se=dualmirror(se)
   
     -- delta is the gap/tolerance for pins and clips
-    local delta=0.2
+    local delta=0.3
     local baset=2
     local sideclip=getclip(baset,h+delta,ls.z)
     local cxt=2
