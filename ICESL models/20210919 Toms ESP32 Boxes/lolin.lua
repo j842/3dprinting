@@ -28,6 +28,10 @@ function lolinsize()
      return v(8,6,3)
   end
   
+
+  function delta()      -- delta is the gap/tolerance for clips
+      return 0.5
+  end
   
   ----------------------------------------
   
@@ -117,16 +121,18 @@ function lolinsize()
   function getclip(baset,h,t)
     local set={}
     local cy=4
-    local cx=1.4*baset
+    local cx=baset+delta()+0.5
+    local aboveboard=h+t+0.05
+    local maxh=aboveboard+2*(cx-baset)
     table.insert(set, getrect(2*baset,cy,0))
     table.insert(set, getrect(2*baset,cy,baset))
     table.insert(set, getrect(baset,cy,h/2+baset/2)) -- half way between baset and h.
-    table.insert(set, getrect(baset,cy,h+t+0.1))
-    table.insert(set, getrect(cx,cy,h+t+0.3))
-    table.insert(set, getrect(baset,cy,h+t+baset*2))
-    local se =  xycenter(sections_extrude(set))
+    table.insert(set, getrect(baset,cy,aboveboard))
+    table.insert(set, getrect(cx,cy,aboveboard+cx-baset))
+    table.insert(set, getrect(baset,cy,maxh))
+    local se =  translate(-baset,-cy/2,0)*sections_extrude(set)
      
-    se=union(se,translate(-baset/2,0,0)*cube(baset,cy*1.15,h+t+baset*2))
+    se=union(se,translate(-baset/2,0,0)*cube(baset,cy*1.15,maxh))
     se=rotate(-90,Z)*se
     return se
   end
@@ -152,28 +158,26 @@ function lolinsize()
       -ls.y/2+holeoffset().y,0)*se
     se=dualmirror(se)
   
-    -- delta is the gap/tolerance for pins and clips
-    local delta=0.3
     local baset=2
-    local sideclip=getclip(baset,h+delta,ls.z)
+    local sideclip=getclip(baset,h,ls.z)
     local cxt=2
     sideclip=translate(  
       ls.x/2-3*holeoffset().x,
-      ls.y/2+delta,
+      ls.y/2+delta(),
       0)*sideclip
     sideclip=union(sideclip,mirror(v(1,0,0))*sideclip)
     sideclip=union(sideclip,mirror(v(0,1,0))*sideclip)
     --sideclip=dualmirror(sideclip)--union(sideclip,mirror(v(1,0,0))*sideclip)
     se=union(se,sideclip)
   
-    local cc=cube(ls.x,ls.y+2*delta,baset)
+    local cc=cube(ls.x,ls.y+2*delta(),baset)
     cc=difference(cc,scale((ls.x-2*baset)/ls.x,(ls.y-2*baset)/ls.y,1)*cc)
     se=union(se,cc)
   
-    local backplate=translate(0,ls.y/2+baset/2+delta,0)*cube(ls.x,baset,ls.z+h)
+    local backplate=translate(0,ls.y/2+baset/2+delta(),0)*cube(ls.x,baset,ls.z+h)
     se=union({se, backplate,
       mirror(v(0,1,0))*backplate})
-    se=difference(se,translate(0,0,h)*usbplug(baset))
+    se=difference(se,translate(0,2*delta(),h)*usbplug(baset))
   
     return se
   end
