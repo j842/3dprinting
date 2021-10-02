@@ -4,6 +4,7 @@ d2=8.3
 d3=12.95
 t=2.5
 l=15.5
+ph=d3/2
 
 --cr=(d3-d1)/5
 
@@ -30,7 +31,6 @@ end
 
 -- bit rod clips in
 function rodclip()
-  local ph=d3/2
   local p=difference(
   union(
   translate(0,d3/4,0)*cube(d3,ph,l),
@@ -49,8 +49,8 @@ function springmechanism(kw,ke,kl1,kl,h)
 
   local springer={ 
       v{ke/2,0,0},
-      v{-ke/2,kl1-gap,0}, 
-      v{ke/2,kl1-gap,0},
+      v{-ke,kl1-gap,0}, 
+      v{0,kl1-gap,0},
       v{3*ke/2,ke,0},
       v{kw/2,kl1,0}, 
       v{0,kl1,0},
@@ -60,37 +60,39 @@ function springmechanism(kw,ke,kl1,kl,h)
   local sm=linear_extrude(v(0,0,h),springer)
   sm=difference(sm,
     translate(0,kl1/2,h-gap)*
-    cube(kw/2,kl1,gap))
+    cube((kw+ke)/2,kl1,gap))
   sm=rotate(90,X)*sm
-  sm=translate(-kw/2,h/2,0)*sm
+  sm=translate(-kw,0,0)*sm
   return sm
 end
 
-function getbox(obj)
+function getcube(obj,kw,kl,h)
   local bb=bbox(obj)
-  local c=cube(bb:extent())
-  c=translate(bb:center()-bbox(c):center())*c
+  local c=ccube(bb:extent())
+--  local c=ccube(kw,h,kl)
+  c=translate(bb:center())*c
   return c
 end  
 
 h=(d3-d1)/2
 kw=(d3-d1)/2
-sm=springmechanism(kw,kw/3,l-t-d1,l,h)
-sm=translate(d3/2-kw/2,d3/2-h/2-0.05,0)*sm
-smb=getbox(sm)
+sm=springmechanism(kw,kw/3,l-d1-t,l-t,h)
+sm=translate(d3/2,d3/2,0)*sm
+-- this translate fixes some rounding error :/
+smb=translate(0,.2,0)*getcube(sm,kw,l,h)
 sm=union(sm,mirror(X)*sm)
 smb=union(smb,mirror(X)*smb)
 rc=rodclip()
 rc=difference(rc,smb)
 rc=union(rc,sm)
 
-emit(rc)
+--emit(rc)
 
 p=union(
 translate(0,0,2*l)*rotate(180,Y)*rc,
 rotate(90,Z)*wheelclip())
 
---emit(rotate(90,X)*p)
+emit(rotate(90,X)*p)
 
 
 
