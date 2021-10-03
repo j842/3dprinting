@@ -8,7 +8,7 @@ set_setting_value('infill_percentage_0',100)
 
 -----------------------
 d1=6.3
-d2=8.3
+d2=8.5 -- original part measured at 8.3, but has a bit much play.
 d3=12.95
 t=2.5
 l=15.5
@@ -27,14 +27,15 @@ end
 
 -- wheel clip/mount
 function wheelclip()
+  local ridged=10
   local o=difference(
     union(
-      cylinder(10/2,2.5),
+      cylinder(ridged/2,2.5), 
       cylinder(d2/2,wl)
     ),
     cylinder(d1/2,wl)
   )
-  o=difference(o,cube(10,3,6))
+  o=difference(o,cube(10,2,6)) -- 2 >= 10-8.5 
   return o
 end
 
