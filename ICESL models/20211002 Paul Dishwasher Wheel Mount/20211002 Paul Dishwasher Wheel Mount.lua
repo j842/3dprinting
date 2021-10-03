@@ -1,9 +1,11 @@
 -- Dishwasher replacement part for Paul.
 
-set_setting_value('use_different_thickness_first_layer',false)
-set_setting_value('z_layer_height_first_layer_mm',0.15)
+set_setting_value('use_different_thickness_first_layer',true)
+set_setting_value('z_layer_height_first_layer_mm',0.3)
 set_setting_value('z_layer_height_mm',0.15)
 set_setting_value('gen_supports',true)
+set_setting_value('support_overhang_overlap_fraction',0.3)
+set_setting_value('support_algorithm','Bridges')
 set_setting_value('infill_percentage_0',100)
 
 -----------------------
@@ -108,7 +110,14 @@ p=union(
 translate(0,0,l+wl-t)*rotate(180,Y)*rc,
 rotate(90,Z)*wheelclip())
 
-emit(rotate(90,X)*p)
+p=rotate(90,X)*p
+
+numthings=6
+for i=1,numthings,1 do
+  emit(translate(d3*1.5*i,0,0)*p)
+end
+
+
 
 
 
