@@ -76,7 +76,7 @@ function springmechanism(kw,ke,kl1,kl,h)
       v{ke/2,0,0},
       v{-ke,kl1-gap,0}, 
       v{0,kl1+ke-gap,0},
-      v{3*ke/2,ke,0},
+      v{3*ke/2,1.5*ke,0},
       v{kw/2,kl1,0}, 
       v{0,kl1+kw/2,0},
       v{0,kl1+kw,0},
