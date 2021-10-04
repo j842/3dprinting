@@ -59,7 +59,9 @@ function rodclip()
 
   round=translate(0,ph/2,l-t-d1/2)*difference(cube(d1,ph,d1/2),
       translate(0,d1/2+0.5,0)*rotate(90,X)*cylinder(d1/2,d1+1))
-  --emit(round)
+
+--  r2=translate(0,0,l-t-d1/2)*rotate(90,X)*cylinder(d1/2,d1+1)
+--  emit(r2)
 
   p=union(p,round)
   p=difference(p,cylinder(d1/2,l))
@@ -68,12 +70,12 @@ function rodclip()
 end
 
 function springmechanism(kw,ke,kl1,kl,h)
-  local gap=0.5
+  local gap=0.8
 
   local springer={ 
       v{ke/2,0,0},
       v{-ke,kl1-gap,0}, 
-      v{0,kl1-gap,0},
+      v{0,kl1+ke-gap,0},
       v{3*ke/2,ke,0},
       v{kw/2,kl1,0}, 
       v{0,kl1+kw/2,0},
