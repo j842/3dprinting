@@ -5,7 +5,7 @@ set_setting_value('z_layer_height_first_layer_mm',0.3)
 set_setting_value('z_layer_height_mm',0.2)
 set_setting_value('gen_supports',true)
 set_setting_value('support_overhang_overlap_fraction',0.3)
-set_setting_value('support_algorithm','Bridges')
+set_setting_value('support_algorithm','Wings')
 set_setting_value('infill_percentage_0',100)
 
 -----------------------
@@ -71,23 +71,24 @@ end
 
 function springmechanism(kw,ke,kl1,kl,h)
   local gap=0.8
+  local maxh=kl1+ke-gap
 
   local springer={ 
       v{ke/2,0,0},
       v{-ke,kl1-gap,0}, 
-      v{0,kl1+ke-gap,0},
-      v{3*ke/2,1.5*ke,0},
+      v{0,maxh,0},
+      v{3*ke/2,1.8*ke,0},
       v{kw/2,kl1,0}, 
       v{0,kl1+kw/2,0},
-      v{0,kl1+kw,0},
-      v{kw,kl1+kw,0},
+      v{0,kl1+kw/2,0},
+      v{kw,kl1+kw/2,0},
       v{kw,0,0}}
   local sm=linear_extrude(v(0,0,h),springer)
 
   -- remove a piece so clip can move
   sm=difference(sm,
-    translate(5*ke/4-ke,kl1/2,h-gap)*
-    cube(5*ke/2,kl1,gap))
+    translate(5*ke/4-ke,maxh/2,h-gap)*
+    cube(5*ke/2,maxh,gap))
 
   sm=rotate(90,X)*sm
   sm=translate(-kw,0,0)*sm
@@ -126,7 +127,7 @@ rotate(90,Z)*wheelclip())
 
 p=xycenter(rotate(180,X)*p)
 
-numthings=1
+numthings=6
 for i=1,numthings,1 do
   emit(translate(d3*1.25*i,0,0)*p)
 end
