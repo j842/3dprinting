@@ -128,10 +128,10 @@ p=xycenter(rotate(180,X)*p)
 
 emit(p)
 
--- numthings=6
--- for i=1,numthings,1 do
---   emit(translate(d3*1.5*i,0,0)*p)
--- end
+numthings=6
+for i=1,numthings,1 do
+  emit(translate(d3*1.25*i,0,0)*p)
+end
 
 
 
