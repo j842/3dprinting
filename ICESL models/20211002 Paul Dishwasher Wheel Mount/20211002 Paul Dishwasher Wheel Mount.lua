@@ -2,7 +2,7 @@
 
 set_setting_value('use_different_thickness_first_layer',true)
 set_setting_value('z_layer_height_first_layer_mm',0.3)
-set_setting_value('z_layer_height_mm',0.15)
+set_setting_value('z_layer_height_mm',0.2)
 set_setting_value('gen_supports',true)
 set_setting_value('support_overhang_overlap_fraction',0.3)
 set_setting_value('support_algorithm','Bridges')
@@ -29,7 +29,7 @@ end
 
 -- wheel clip/mount
 function wheelclip()
-  local ridged=10
+  local ridged=11 -- was 10 in MkI.
   local o=difference(
     union(
       cylinder(ridged/2,2.5), 
@@ -38,7 +38,7 @@ function wheelclip()
     cylinder(d1/2,wl)
   )
 -- was 10,3,6 in mkI
-  o=difference(o,cube(10,2,6)) -- 2 >= 10-8.5 
+  o=difference(o,cube(ridged,2.5,6)) -- 2.5 >= 11-8.5 
   return o
 end
 
@@ -114,10 +114,12 @@ rotate(90,Z)*wheelclip())
 
 p=rotate(90,X)*p
 
-numthings=6
-for i=1,numthings,1 do
-  emit(translate(d3*1.5*i,0,0)*p)
-end
+emit(p)
+
+-- numthings=6
+-- for i=1,numthings,1 do
+--   emit(translate(d3*1.5*i,0,0)*p)
+-- end
 
 
 
