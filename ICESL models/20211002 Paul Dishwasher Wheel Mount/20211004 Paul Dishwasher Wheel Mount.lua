@@ -126,9 +126,7 @@ rotate(90,Z)*wheelclip())
 
 p=xycenter(rotate(180,X)*p)
 
-emit(p)
-
-numthings=6
+numthings=1
 for i=1,numthings,1 do
   emit(translate(d3*1.25*i,0,0)*p)
 end
