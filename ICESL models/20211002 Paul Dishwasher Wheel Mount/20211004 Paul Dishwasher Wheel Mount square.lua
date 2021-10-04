@@ -29,7 +29,7 @@ end
 
 -- wheel clip/mount
 function wheelclip()
-  local ridged=11 -- was 10 in MkI.
+  local ridged=10.2  -- was 10.0 in mkI
   ch=ridged/2-d2/2
   cht=2.5
   local o=difference(
@@ -41,22 +41,28 @@ function wheelclip()
     cylinder(d1/2,wl)
   )
 -- was 10,3,6 in mkI
-  o=difference(o,cube(ridged,2.5,6)) -- 2.5 >= 11-8.5 
+  o=difference(o,cube(ridged,0.5+ridged-d2,6)) 
   return o
 end
 
 -- bit rod clips in
 function rodclip()
-  local p=difference(
+  local p=
   union(
-  translate(0,d3/4,0)*cube(d3,ph,l),
---  cube(d3,d3,l)
-  cylinder(d3/2,l)
-  ),
-  cylinder(d1/2,l)
+    translate(0,d3/4,0)*cube(d3,ph,l),
+  --  cube(d3,d3,l)
+    cylinder(d3/2,l)
   )
+
   p=difference(p,
     translate(0,ph/2,0)*cube(d1,ph,l-t))
+
+  round=translate(0,ph/2,l-t-d1/2)*difference(cube(d1,ph,d1/2),
+      translate(0,d1/2+0.5,0)*rotate(90,X)*cylinder(d1/2,d1+1))
+  --emit(round)
+
+  p=union(p,round)
+  p=difference(p,cylinder(d1/2,l))
 
   return p
 end
@@ -71,8 +77,8 @@ function springmechanism(kw,ke,kl1,kl,h)
       v{3*ke/2,ke,0},
       v{kw/2,kl1,0}, 
       v{0,kl1+kw/2,0},
-      v{0,kl,0},
-      v{kw,kl,0},
+      v{0,kl1+kw,0},
+      v{kw,kl1+kw,0},
       v{kw,0,0}}
   local sm=linear_extrude(v(0,0,h),springer)
 
