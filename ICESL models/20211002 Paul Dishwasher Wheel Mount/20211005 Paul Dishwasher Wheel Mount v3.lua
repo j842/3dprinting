@@ -43,8 +43,7 @@ function wheelclip()
   cht=2.5
   local o=difference(
     union({
-      cylinder(ridged/2,cht-ch), 
-      translate(0,0,cht-ch)*cone(ridged/2,d2/2,ch),
+      cylinder(ridged/2,cht), 
       cylinder(d2/2,wl)}
     ),
     cylinder(d1/2,wl)
