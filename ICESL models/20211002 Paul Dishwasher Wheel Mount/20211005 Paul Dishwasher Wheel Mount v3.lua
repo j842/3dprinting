@@ -137,7 +137,7 @@ p=xycenter(rotate(90,X)*p)
 
 --emit(cornercube(d3,d3,l))
 
-numthings=3
+numthings=1
 for i=1,numthings,1 do
   emit(translate(d3*1.25*i,0,0)*p)
 end
