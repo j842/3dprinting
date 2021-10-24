@@ -17,40 +17,41 @@ module spray()
     $fn=100;
     
     ht=3;
-    tvec=[30,0,100];
+    tvec=[10,0,50];
     rvec=[0,50,0];
+    bigr=85/2;
         
     difference() {
         hull() {
             cylinder(h=3,r=cyld/2+cylt);
-            translate(tvec) rotate(a=rvec) cylinder(h=ht,r=85);
+            translate(tvec) rotate(a=rvec) cylinder(h=ht,r=bigr);
         };
         hull() {
             translate([0,0,-0.005]) cylinder(h=3,r=cyld/2);
-            translate(tvec+[0,0,0.006]) rotate(a=rvec) cylinder(h=ht,r=85-cylt);
+            translate(tvec+[0,0,0.006]) rotate(a=rvec) cylinder(h=ht,r=bigr-cylt);
         };
     }
     
     translate(tvec+[0,0,-0.006]) rotate(a=rvec) difference()
     {
-        r0=4;
+        r0=2;
         h0=4;
         dh=0.05;
-        cylinder(h=3,r=85);
+        cylinder(h=3,r=bigr);
         translate([0,0,-dh]) cylinder(h=h0,r=r0);
         for ( i = [0 : 5] ){
             rotate( i * 60, [0, 0, 1])
-            translate([0, 20, -dh])
+            translate([0, 10, -dh])
             cylinder(h=h0,r=r0);
         }
         for ( i = [0 : 11] ){
             rotate( i * 30, [0, 0, 1])
-            translate([0, 40, -dh])
+            translate([0, 20, -dh])
             cylinder(h=h0,r=r0);
         }
         for ( i = [0 : 23] ){
             rotate( i * 15, [0, 0, 1])
-            translate([0, 60, -dh])
+            translate([0, 30, -dh])
             cylinder(h=h0,r=r0);
         }
     }
