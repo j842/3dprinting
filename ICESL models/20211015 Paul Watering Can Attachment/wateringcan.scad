@@ -18,7 +18,7 @@ module spray()
     
     ht=3;
     tvec=[10,0,50];
-    rvec=[0,50,0];
+    rvec=[0,40,0];
     bigr=85/2;
         
     difference() {
@@ -34,7 +34,7 @@ module spray()
     
     translate(tvec+[0,0,-0.006]) rotate(a=rvec) difference()
     {
-        r0=2;
+        r0=1;
         h0=4;
         dh=0.05;
         cylinder(h=3,r=bigr);
@@ -57,5 +57,7 @@ module spray()
     }
 }
 
-cyl();
-spray();
+rotate([0,-40+180,0]) {
+    cyl();
+    spray();
+}
