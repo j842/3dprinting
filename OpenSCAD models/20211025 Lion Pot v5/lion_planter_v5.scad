@@ -56,17 +56,16 @@ $fn=100;
   }
 
   module cylinderz(a,kfac,aoff) {
-      translate([0,-kw/2,0]) rotate([0,0,a+aoff]) 
-        translate([0,-kfac*k,0]) cylinder(h=kw, r=1.1*t);
+      translate([kw/2,0,0]) rotate([0,0,a+aoff]) 
+        translate([kfac*k,0,0]) cylinder(h=kw, r=0.9*t);
   }
   
   module permeablebase() {
     // curved holed inside water filter bit
-    rr0=kw/6;
-    rr1=kw/2;
+    rr0=kw/4;
     c0=t;
-    c1=t+rr1-rr0;
-    ad=360/10;
+    numholes=15;
+    ad=360/numholes;
       
     difference()
       {
@@ -74,17 +73,18 @@ $fn=100;
         {
           difference() {
             translate([0,0,c0]) 
-                cylinder(h=kw,r1=rr0,r2=kw-rr0);
+                cylinder(h=kw,r1=rr0,r2=kw+rr0);
             translate([0,0,c0-epsilon])
-                cylinder(h=kw,r1=rr0-t,r2=kw-rr0-t);
+                cylinder(h=kw,r1=rr0-t,r2=kw-t);
             }
             translate([0,0,kw/2]) cube([kw,kw,hh],true);
         }
         
-        for (a=[0:360:ad]) {
-            cylinderz(a,26.2,0.5*ad);
-            cylinderz(a,30,0);
-            cylinderz(a,35,0.5*ad);
+        for (a=[1:numholes]) {
+            cylinderz(a*ad,19,0.5*ad);
+            cylinderz(a*ad,24,0);
+            cylinderz(a*ad,28,0.5*ad);
+            cylinderz(a*ad,32,0);
         }
     }
 }
