@@ -3,6 +3,7 @@
 
 use <stl/lion2.scad>
 use <stl/leaf.scad>
+use <ttf/Chocolate.ttf>
 
 
 printplanter=true;
@@ -125,6 +126,24 @@ module sideleaves()
     translate([kw/2,0,0]) rotate([0,0,-90]) translate([-kw/2,0,0]) closeleaves();
 }
 
+module embossedtext()
+{
+    translate([kw-0.6,0,60*k]) rotate([90,0,90]) 
+    linear_extrude(t+2*epsilon){
+       text("He iti,",size=6*k,halign="center",font="Chocolate");
+    }
+    translate([kw-0.6,0,45*k]) rotate([90,0,90]) 
+    linear_extrude(t+2*epsilon){
+       text("he iti kahikatoa.",size=6*k,halign="center",font="Chocolate");
+    }
+
+}
+
+module adjustedlion()
+{
+            translate([t-epsilon,0,55*k]) rotate([90,0,-90]) scale(0.25*k) lion();
+}
+
 union() 
 {
     difference() 
@@ -132,16 +151,16 @@ union()
         baseshape(0);
         translate([0,0,t+epsilon]) baseshape(t);
         spouthole();
+        embossedtext();
     }
+    
     permeablebase();
+
+    adjustedlion();
+
+    frontleaves();
+    backleaves();
+    sideleaves();
+
 }
-
-translate([t-epsilon,0,55*k]) rotate([90,0,-90]) scale(0.25*k) lion();
-
-frontleaves();
-backleaves();
-sideleaves();
-
-
-
 
