@@ -28,12 +28,15 @@ $fn=100;
 
 // baseshape, with walls adjusted by offset (inwards)
   module baseshape(off) {
+    fcx=rr+2*epsilon;
+    fcy=2*rr-2*off;  
+      
     union() {
       translate([off,-(kw-2*off)/2,0])
         cube([kw-2*off,kw-2*off,hh-off]);
         
-      translate([-rr+off,-rr+off,0])
-        cube([rr+epsilon+off,2*rr-2*off,hh/3-off]);
+      translate([-fcx+epsilon,-fcy/2,0])
+        cube([fcx,fcy,hh/3-off]);
 
       translate([-rr,0,0]) 
         cylinder(h=hh/3-off,r=rr-off);
@@ -144,23 +147,67 @@ module adjustedlion()
             translate([t-epsilon,0,55*k]) rotate([90,0,-90]) scale(0.25*k) lion();
 }
 
-union() 
+module pot()
 {
-    difference() 
+    union() 
     {
-        baseshape(0);
-        translate([0,0,t+epsilon]) baseshape(t);
-        spouthole();
-        embossedtext();
+        difference() 
+        {
+            baseshape(0);
+            translate([0,0,t+epsilon]) baseshape(t);
+            spouthole();
+            embossedtext();
+        }
+        
+        permeablebase();
+
+        adjustedlion();
+
+        frontleaves();
+        backleaves();
+        sideleaves();
+
+    }
+}
+
+module base()
+{
+  bsgap=0.5; //  -- 0.5mm gap between base and platner
+  bcx=kw+2*rr+2*bsgap+2*t; // base thickness t.
+  bcy=kw+2*bsgap+2*t;
+  bcz=3*t; // base height 2*t, base thickness t.
+    
+    
+  intersection()
+    {
+        difference()
+        {
+           translate([kw/2-rr-t/2,0,bcz/2]) 
+                cube([bcx,bcy,bcz],center=true);
+            
+           translate([0,0,t]) 
+                baseshape(-bsgap); 
+        }
+        
+      baseshape(-t-2*bsgap);
     }
     
-    permeablebase();
-
-    adjustedlion();
-
-    frontleaves();
-    backleaves();
-    sideleaves();
-
 }
+
+
+if (printplanter) {
+    pot();
+}
+
+if (printbase)
+{
+    if (printplanter)
+    {
+        translate([0,0,-2*t]) base();
+    } else
+    {
+        base();
+    }
+}
+
 
