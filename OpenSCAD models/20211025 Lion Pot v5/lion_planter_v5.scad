@@ -69,6 +69,8 @@ $fn=100;
   module permeablebase() {
     // curved holed inside water filter bit
     rr0=kw/4;
+    rr1=rr0+0.7*kw; // rr1 <= rr0+kw
+    tt0=0.7*t;
     c0=t;
     numholes=15;
     ad=360/numholes;
@@ -79,15 +81,15 @@ $fn=100;
         {
           difference() {
             translate([0,0,c0]) 
-                cylinder(h=kw,r1=rr0,r2=kw+rr0);
+                cylinder(h=kw,r1=rr0,r2=rr1);
             translate([0,0,c0-epsilon])
-                cylinder(h=kw,r1=rr0-t,r2=kw-t);
+                cylinder(h=kw,r1=rr0-tt0,r2=rr1-tt0);
             }
             translate([0,0,kw/2]) cube([kw,kw,hh],true);
         }
         
         for (a=[1:numholes]) {
-            cylinderz(a*ad,19,0.5*ad);
+            cylinderz(a*ad,19.7,0.5*ad);
             cylinderz(a*ad,24,0);
             cylinderz(a*ad,28,0.5*ad);
             cylinderz(a*ad,32,0);
