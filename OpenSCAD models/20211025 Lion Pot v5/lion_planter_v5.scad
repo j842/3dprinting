@@ -7,7 +7,7 @@ use <ttf/Chocolate.ttf>
 
 
 printplanter=true;
-printbase=true;
+printbase=false;
 
 // Scale factor - determines size of planter. 
 // 1.0, 1.25, 1.5 and 1.95 all tested.
@@ -45,18 +45,20 @@ $fn=100;
 
 // hole for water to go from spout to planter
   module spouthole() {
-    shw=0.8*(2*rr-2*t);
+    shw=2*rr-2*t;
     sht=t+1;
     shh=0.05*hh/4;
-    intersection()
-      {
+//    intersection()
+//      {
           union() 
           {
-              translate([0,-t/2,t]) cube([shw,sht,shh]);
-              translate([0,0,t+shh]) rotate([90,0,0]) cylinder(h=sht,r=shw/2);
+              translate([t/2,0,t+shw/4])
+                cube([sht,shw,shw/2],center=true);
+              translate([0,0,t+shw/2]) rotate([0,90,0])
+                cylinder(h=sht,r=shw/2);
           }
-          translate([0,-sht/2,t]) cube([shw,sht,hh/3]);
-      }
+          //translate([0,-sht/2,t]) cube([shw,sht,hh/3]);
+ //     }
   }
 
   module cylinderz(a,kfac,aoff) {
