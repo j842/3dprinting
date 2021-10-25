@@ -15,7 +15,7 @@ k=1.25;
 epsilon=0.005;
 opepsilon=1+epsilon;
 vepsilon=epsilon*[1,1,1];
-t=1.5+k/2;
+t=2.0+k/2;
 embosst=0.6;
 w=80;
 hh=k*80;
@@ -57,7 +57,7 @@ $fn=100;
 
   module cylinderz(a,kfac,aoff) {
       translate([kw/2,0,0]) rotate([0,0,a+aoff]) 
-        translate([kfac*k,0,0]) cylinder(h=kw, r=0.9*t);
+        translate([kfac*k,0,0]) cylinder(h=kw, r=0.8*t);
   }
   
   module permeablebase() {
