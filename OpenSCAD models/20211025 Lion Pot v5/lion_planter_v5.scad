@@ -11,7 +11,7 @@ printbase=false;
 
 // Scale factor - determines size of planter. 
 // 1.0, 1.25, 1.5 and 1.95 all tested.
-k=1.5;
+k=1.95;
 
 epsilon=0.005;
 opepsilon=1+epsilon;
