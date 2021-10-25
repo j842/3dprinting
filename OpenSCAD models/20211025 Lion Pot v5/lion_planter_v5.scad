@@ -1,8 +1,8 @@
 // Lion Planter v5.
 // Does not need supports.
 
-use <stl/lion2.scad>
-use <stl/leaf.scad>
+use <input/lion3.scad>
+use <input/leaf.scad>
 use <ttf/Chocolate.ttf>
 
 
@@ -151,7 +151,10 @@ module embossedtext()
 
 module adjustedlion()
 {
-            translate([t-epsilon,0,55*k]) rotate([90,0,-90]) scale(0.25*k) lion();
+    translate([-epsilon,0,55*k])
+        rotate([90,0,-90]) 
+        scale(0.25*k) 
+        lion();
 }
 
 module pot()
