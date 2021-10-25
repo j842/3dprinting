@@ -11,7 +11,7 @@ printbase=false;
 
 // Scale factor - determines size of planter. 
 // 1.0, 1.25, 1.5 and 1.95 all tested.
-k=1.25;
+k=1.5;
 
 epsilon=0.005;
 opepsilon=1+epsilon;
@@ -95,20 +95,27 @@ $fn=100;
     }
 }
 
+module getleaf()
+{
+    www=5;
+    translate([-epsilon,www,70*k]) 
+        scale([4,k-0.25,k-0.25]) rotate([90,0,-90]) 
+        leaf();
+}
+
 module frontleaves()
 {
-    translate([-epsilon,5,70*k]) scale([4,1,1]) rotate([90,0,-90]) leaf();
+    getleaf();
 
-    mirror([0,1,0]) translate([-epsilon,5,70*k]) scale([4,1,1])     rotate([90,0,-90]) leaf();
+    mirror([0,1,0]) getleaf();
 }
 
 module backleaves()
 {
     scale([1,0.6,0.6]) mirror([1,0,0]) translate([-kw,0,0]) union()
     {
-    translate([-epsilon,5,70*k]) scale([4,1,1]) rotate([90,0,-90]) leaf();
-
-    mirror([0,1,0]) translate([-epsilon,5,70*k]) scale([4,1,1])     rotate([90,0,-90]) leaf();
+        getleaf();
+        mirror([0,1,0]) getleaf();
     }
 }
 
@@ -116,10 +123,8 @@ module closeleaves()
 {
     union()
     {
-        
-        translate([-epsilon,-5,70*k]) scale([4,1,1]) rotate([90,0,-90]) leaf();
-
-        mirror([0,1,0]) translate([-epsilon,-5,70*k]) scale([4,1,1])     rotate([90,0,-90]) leaf();
+        translate([0,-10*k,0]) getleaf();
+        mirror([0,1,0]) translate([0,-10*k,0]) getleaf();
     }
 }
 
@@ -128,7 +133,7 @@ module sideleaves()
     translate([kw/2,0,0]) rotate([0,0,90]) translate([-kw/2,0,0])
     closeleaves();
     
-    translate([kw/2,0,0]) rotate([0,0,-90]) translate([-kw/2,0,0]) closeleaves();
+    translate([kw/2,0,0]) rotate([0,0,-90]) translate([-kw/2,0,0])closeleaves();
 }
 
 module embossedtext()
@@ -175,7 +180,7 @@ module pot()
 module base()
 {
   bsgap=0.5; //  -- 0.5mm gap between base and platner
-  bcx=kw+2*rr+2*bsgap+2*t; // base thickness t.
+  bcx=kw+2*rr+2*bsgap+3*t; // base thickness t.
   bcy=kw+2*bsgap+2*t;
   bcz=3*t; // base height 2*t, base thickness t.
     
@@ -184,7 +189,7 @@ module base()
     {
         difference()
         {
-           translate([kw/2-rr-t/2,0,bcz/2]) 
+           translate([kw/2-rr,0,bcz/2]) 
                 cube([bcx,bcy,bcz],center=true);
             
            translate([0,0,t]) 
