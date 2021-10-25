@@ -1,7 +1,7 @@
 // Lion Planter v5.
 // Does not need supports.
 
-use <stl/lion.scad>
+use <stl/lion2.scad>
 use <stl/leaf.scad>
 
 
@@ -89,6 +89,41 @@ $fn=100;
     }
 }
 
+module frontleaves()
+{
+    translate([-epsilon,5,70*k]) scale([4,1,1]) rotate([90,0,-90]) leaf();
+
+    mirror([0,1,0]) translate([-epsilon,5,70*k]) scale([4,1,1])     rotate([90,0,-90]) leaf();
+}
+
+module backleaves()
+{
+    scale([1,0.6,0.6]) mirror([1,0,0]) translate([-kw,0,0]) union()
+    {
+    translate([-epsilon,5,70*k]) scale([4,1,1]) rotate([90,0,-90]) leaf();
+
+    mirror([0,1,0]) translate([-epsilon,5,70*k]) scale([4,1,1])     rotate([90,0,-90]) leaf();
+    }
+}
+
+module closeleaves()
+{
+    union()
+    {
+        
+        translate([-epsilon,-5,70*k]) scale([4,1,1]) rotate([90,0,-90]) leaf();
+
+        mirror([0,1,0]) translate([-epsilon,-5,70*k]) scale([4,1,1])     rotate([90,0,-90]) leaf();
+    }
+}
+
+module sideleaves()
+{
+    translate([kw/2,0,0]) rotate([0,0,90]) translate([-kw/2,0,0])
+    closeleaves();
+    
+    translate([kw/2,0,0]) rotate([0,0,-90]) translate([-kw/2,0,0]) closeleaves();
+}
 
 union() 
 {
@@ -101,5 +136,12 @@ union()
     permeablebase();
 }
 
-//lion();
-//leaf();
+translate([t-epsilon,0,55*k]) rotate([90,0,-90]) scale(0.25*k) lion();
+
+frontleaves();
+backleaves();
+sideleaves();
+
+
+
+
