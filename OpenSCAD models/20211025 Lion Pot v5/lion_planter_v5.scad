@@ -22,13 +22,20 @@ hh=k*80;
 kw=k*w;
 rr=kw/6.5;
 
+$fn=100;
+
 
 // baseshape, with walls adjusted by offset (inwards)
   module baseshape(off) {
     union() {
-      translate([off,-(kw-2*off)/2,0]) cube([kw-2*off,kw-2*off,hh-off]);
-      translate([-rr,-rr,0]) cube([rr+2+epsilon,2*rr-2*off,hh/3-off]);
-      translate([-rr,0,0]) cylinder(h=hh/3-off,r=rr-off);
+      translate([off,-(kw-2*off)/2,0])
+        cube([kw-2*off,kw-2*off,hh-off]);
+        
+      translate([-rr+off,-rr+off,0])
+        cube([rr+epsilon+off,2*rr-2*off,hh/3-off]);
+
+      translate([-rr,0,0]) 
+        cylinder(h=hh/3-off,r=rr-off);
     }
 }
 
@@ -55,22 +62,23 @@ rr=kw/6.5;
   
   module permeablebase() {
     // curved holed inside water filter bit
-    rr0=kw/3;
-    rr1=kw;
+    rr0=kw/6;
+    rr1=kw/2;
     c0=t;
     c1=t+rr1-rr0;
     ad=360/10;
       
     difference()
       {
-        translate([0,-kw/2,0]) intersection()
+        translate([kw/2,0,0]) intersection()
         {
           difference() {
-            translate([0,0,c0]) cylinder(h=c1-c0,r1=rr0,r2=rr1);
+            translate([0,0,c0]) 
+                cylinder(h=kw,r1=rr0,r2=kw-rr0);
             translate([0,0,c0-epsilon])
-                cylinder(h=c1+2*epsilon-c0,r1=rr0-t,r2=rr1-t);
+                cylinder(h=kw,r1=rr0-t,r2=kw-rr0-t);
             }
-            cube([kw-t/2,kw-t/2,hh]);
+            translate([0,0,kw/2]) cube([kw,kw,hh],true);
         }
         
         for (a=[0:360:ad]) {
@@ -92,8 +100,6 @@ union()
     }
     permeablebase();
 }
-
-
 
 //lion();
 //leaf();

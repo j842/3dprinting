@@ -2,7 +2,7 @@
 
 -- print just the base, just the planter, or both (if bed is big enough)
 printplanter=true
-printbase=true
+printbase=false
 
 -- debug just shows them together.
 debug=false
