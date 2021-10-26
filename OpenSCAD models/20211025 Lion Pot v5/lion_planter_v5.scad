@@ -11,7 +11,7 @@ printbase=false;
 
 // Scale factor - determines size of planter. 
 // 1.0, 1.25, 1.5 and 1.95 all tested.
-k=1.95;
+k=1.25;
 
 epsilon=0.005;
 opepsilon=1+epsilon;
@@ -48,17 +48,13 @@ $fn=100;
     shw=2*rr-2*t;
     sht=t+1;
     shh=0.05*hh/4;
-//    intersection()
-//      {
-          union() 
-          {
-              translate([t/2,0,t+shw/4])
-                cube([sht,shw,shw/2],center=true);
-              translate([0,0,t+shw/2]) rotate([0,90,0])
-                cylinder(h=sht,r=shw/2);
-          }
-          //translate([0,-sht/2,t]) cube([shw,sht,hh/3]);
- //     }
+    union() 
+    {
+      translate([t/2,0,t+shw/4])
+        cube([sht,shw,shw/2],center=true);
+      translate([0,0,t+shw/2]) rotate([0,90,0])
+        cylinder(h=sht,r=shw/2);
+    }
   }
 
   module cylinderz(a,kfac,aoff) {
@@ -90,9 +86,9 @@ $fn=100;
         
         for (a=[1:numholes]) {
             cylinderz(a*ad,19.7,0.5*ad);
-            cylinderz(a*ad,24,0);
-            cylinderz(a*ad,28,0.5*ad);
-            cylinderz(a*ad,32,0);
+            cylinderz(a*ad,23,0);
+            cylinderz(a*ad,26,0.5*ad);
+            cylinderz(a*ad,29,0);
         }
     }
 }
