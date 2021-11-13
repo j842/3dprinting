@@ -1,7 +1,7 @@
 // Lion Planter v5.
 // Does not need supports.
 
-use <input/lion3.scad>
+use <input/lionhead3.scad>
 use <input/leaf.scad>
 use <ttf/Chocolate.ttf>
 
