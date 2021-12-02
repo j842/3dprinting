@@ -41,7 +41,7 @@ basethickness=4*layerh-0.001
 str='30 Sheen St'
 texth=20
 gap=8
-height=texth*2 + 3*gap
+height=texth*3 + 4*gap
 screwholeradius=1.6
 
 -- so want to change filament at end of layer 3,
@@ -68,6 +68,16 @@ arrow=mirror(v(1,0,0))*translate(0,-texth/2-gap/2,basethickness)*arrow
 
 writing=union(letters,arrow)
 
+local letters2=jshapes.xycenter(f:str('at the end of the drive',1))
+local e2 = bbox(letters2):extent()
+local factor2 = textw/e2.x
+letters2=scale(factor2,factor2,thickness/e2.z)*letters2
+local textw2 = bbox(letters2):extent().x
+local width2=textw2 + 2*2*gap
+letters2=translate(0,-3/2*texth-gap,basethickness)*letters2
+
+writing=union(writing,letters2)
+
 
 function mirrorx(obj)
 return union(obj,mirror(v(1,0,0))*obj)
@@ -78,6 +88,7 @@ holes=mirrorx(translate(width/2,0,0)*cylinder(screwholeradius,basethickness))
 holeback=mirrorx(translate(width/2,0,0)*cylinder(6,basethickness))
 backing=union(backing,holeback)
 backing=difference(backing,holes)
+backing=translate(0,-texth+gap,0)*backing
 
 set_brush_color (1,1,1,1)
 set_brush_color (2,0,0,0)
