@@ -18,6 +18,7 @@ l=(620+2*ov)/3
 
 x=rotate(90,Y)*cylinder(cr,l)
 y=intersection(x,cube(2*l,2*l,l))
+
 y=difference(y,translate(ov/2,cr/2,0)*cube(ov,cr,10))
 
 z=difference(y,translate(l-ov/2,-cr/2,0)*cube(ov,cr,10))
@@ -36,9 +37,12 @@ screwhole=union(
   cylinder(r1,cr)
 }
 )
-
-z=difference(z,translate(l/2,0,0)*screwhole)
-y=difference(y,translate(l-2*cr,0,0)*screwhole)
+screwz=union(
+  translate(l-4*cr,0,0)*screwhole,
+  translate(4*cr,0,0)*screwhole
+)
+z=difference(z,screwz)
+y=difference(y,screwz)
 
 spacing=cr*2+8
 
