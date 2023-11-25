@@ -52,7 +52,8 @@ end
 r0=innerr+happythick
 r1=r0+4
 h0=14
-h1=10
+h1=8
+h2=12
 
 a=union(
 {
@@ -66,12 +67,12 @@ a=union(
 -- conical diffuser part
   translate(0,0,h0)*difference(
   cone(r0,r1,h1),
-  cone(r0-viewthick,r1-viewthick,h1)
+  cone(innerr,r1-viewthick,h1)
   ),
 
 -- straight (top) diffuser part
   translate(0,0,h1+h0)*
-  difference( cylinder(r1,h1), cylinder(r1-viewthick,h1) )
+  difference( cylinder(r1,h2), cylinder(r1-viewthick,h2) )
 }
 )
 
