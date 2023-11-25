@@ -1,4 +1,5 @@
 -- diffuser for microscope objective
+-- clamped on with 20mm m4 bolts.
 
 set_setting_value('use_different_thickness_first_layer',true)
 set_setting_value('z_layer_height_first_layer_mm',0.3)
@@ -22,15 +23,27 @@ happythick=3
 viewthick=1
 totalh=65
 
+-- round the top half of the cube nicely...
+function rcube(dx,dy,dz)
+  return intersection(
+    cube(dx,dy,dz),
+    union(
+    translate(0,dy/2,dz/2+(dz-dx)/2)*rotate(90,0,0)*cylinder(dx/2,dy),
+    cube(dx,dy,dz/2+(dz-dx)/2)
+)
+)
+end
 
 -- create full height block from xl to xr, with thickness ythick, and bolts at xboltpos.
 function addboltedtab(sring, xl,xr,xboltpos,ythick,height,boltheight,boltlength)
 
-  sring=union(sring, translate(xl+0.5*(xr-xl),0,0)*cube(xr-xl,ythick,height))
+local housing=translate(xl+0.5*(xr-xl),0,0)*
+  rcube(xr-xl,ythick,height)
 
   local vec=v(xboltpos,ythick/2,boltheight)
   local b1=jshapes.m4rn(v(vec.x,vec.y,vec.z),v(vec.x,-vec.y,vec.z),boltlength-0.2)
-  sring=difference(sring,b1)
+
+  sring=difference(union(sring,housing),b1)
 
   return sring
 end
