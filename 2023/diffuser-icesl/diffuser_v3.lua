@@ -4,7 +4,7 @@ set_setting_value('use_different_thickness_first_layer',true)
 set_setting_value('z_layer_height_first_layer_mm',0.3)
 set_setting_value('z_layer_height_mm',0.2)
 set_setting_value('gen_supports',false)
-set_setting_value('brim',false)
+set_setting_value('add_brim',false)
 set_setting_value('infill_percentage_0',15)
 
 
@@ -24,19 +24,13 @@ totalh=65
 
 
 -- create full height block from xl to xr, with thickness ythick, and bolts at xboltpos.
-function addboltedtab(sring, xl,xr,xboltpos,ythick,height,boltheight)
-  -- provide 1mm extension for 15mm bolt in case fit is tight and gap needed.
-  local bolts=15-1
+function addboltedtab(sring, xl,xr,xboltpos,ythick,height,boltheight,boltlength)
 
   sring=union(sring, translate(xl+0.5*(xr-xl),0,0)*cube(xr-xl,ythick,height))
 
   local vec=v(xboltpos,ythick/2,boltheight)
-  local b1=jshapes.m4rn(v(vec.x,vec.y,vec.z),v(vec.x,-vec.y,vec.z),bolts)
-  vec.z=0.75*height
---  local b2=jshapes.m4rn(v(vec.x,vec.y,vec.z),v(vec.x,-vec.y,vec.z),bolts)
-
+  local b1=jshapes.m4rn(v(vec.x,vec.y,vec.z),v(vec.x,-vec.y,vec.z),boltlength-0.2)
   sring=difference(sring,b1)
---  sring=difference(sring,b2)
 
   return sring
 end
@@ -73,9 +67,10 @@ cylinder(r0+happythick,2*happythick)
 a=union(a,base)
 
 xr=r1-6
-m4len=10
-a=addboltedtab(a,xr,xr+m4len,xr+m4len/2,20,h0,2*h0/3)
-a=addboltedtab(a,-xr-m4len,-xr,-xr-m4len/2,20,h0,2*h0/3)
+xw=12
+m4len=20
+a=addboltedtab(a,xr,xr+xw,xr+xw/2,m4len,h0,0.6*h0,m4len)
+a=addboltedtab(a,-xr-xw,-xr,-xr-xw/2,m4len,h0,0.6*h0,m4len)
 
 
 b=cylinder(innerr,totalh)
