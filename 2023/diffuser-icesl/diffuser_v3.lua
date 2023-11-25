@@ -14,7 +14,7 @@ jshapes=require("jshapes")
 -- width of microsccope objective lens
 objectivew=24
 
-
+-- other parameters
 gap=0.1
 innerr=objectivew/2+gap
 shroudw=58
@@ -35,91 +35,86 @@ function addboltedtab(sring, xl,xr,xboltpos,ythick,height,boltheight,boltlength)
   return sring
 end
 
-
+-- tiny light diffuser
 r0=innerr+happythick
 r1=r0+4
-r2=r1
 h0=14
 h1=10
-h2=10
 
-a=cylinder(r0,h0)
-a=union(a,
-translate(0,0,h0)*
-difference(
-cone(r0,r1,h1),
-cone(r0-viewthick,r1-viewthick,h1)
+a=union(
+{
+-- base part (two discs)
+  cylinder(shroudw/2,happythick),
+  cylinder(r0+happythick,2*happythick),
+
+-- stem - clamps the objective
+  cylinder(r0,h0),
+
+-- conical diffuser part
+  translate(0,0,h0)*difference(
+  cone(r0,r1,h1),
+  cone(r0-viewthick,r1-viewthick,h1)
+  ),
+
+-- straight (top) diffuser part
+  translate(0,0,h1+h0)*
+  difference( cylinder(r1,h1), cylinder(r1-viewthick,h1) )
+}
 )
-)
 
-a=union(a,
- translate(0,0,h1+h0)*
- difference(
- cylinder(r1,h2),
- cylinder(r1-viewthick,h2)
- )
- )
-
-base=union(
-cylinder(shroudw/2,happythick),
-cylinder(r0+happythick,2*happythick)
-)
-a=union(a,base)
-
+-- bolt tabs
 xr=r1-6
 xw=12
 m4len=20
 a=addboltedtab(a,xr,xr+xw,xr+xw/2,m4len,h0,0.6*h0,m4len)
 a=addboltedtab(a,-xr-xw,-xr,-xr-xw/2,m4len,h0,0.6*h0,m4len)
 
-
+-- make sure nothing is in the way of where the objective goes!
 b=cylinder(innerr,totalh)
 a=difference(a,b)
-
---a=translate(0,0,happythick)*a
---emit(a)
 
 -- split it
 xmax=shroudw
 ymax=shroudw
 height=totalh
 halfcube=translate(0,-ymax,0)*cube(xmax,2*ymax,height)
---emit(halfcube)
 abot=intersection(a,halfcube)
 atop=difference(a,halfcube)
 
-abot=translate(0,-5,0)*abot
-
-emit(atop)
-emit(abot)
-
-
----------------------------------------------
-
--- topr=60
--- bracketw=50
-
--- top=difference(
--- cylinder(topr,happythick),
--- union(
--- {
--- cylinder(innerr,totalh),
--- translate(topr/2,0,0)*ccube(topr,innerr*2,totalh),
--- translate(topr/2+shroudw/2,0,0)*ccube(topr,bracketw,totalh)
--- }))
-
--- top=union(top,
--- difference(cylinder(topr,totalh),cylinder(topr-viewthick,totalh))
--- )
-
--- magich=30
--- top=difference({top,
--- translate(topr,0,magich)*cone(bracketw/2,0,magich+2),
--- translate(topr,0,0)*cube(topr,bracketw,magich+0.1)}
--- )
-
--- emit(top)
+-- render either together or apart (for printing) as needed.
+clamp_apart=union(translate(0,-5,0)*abot,atop)
+clamp_together=rotate(0,0,90)*translate(0,0,happythick)*union(abot,atop)
 
 
+-------------------------------------------
 
---emit(cylinder(24/2,30))
+topr=60
+bracketw=50
+
+lightshade=difference(
+cylinder(topr,happythick),
+union(
+{
+cylinder(innerr,totalh),
+translate(topr/2,0,0)*ccube(topr,innerr*2,totalh),
+translate(topr/2+shroudw/2,0,0)*ccube(topr,bracketw,totalh)
+}))
+
+lightshade=union(lightshade,
+difference(cylinder(topr,totalh),cylinder(topr-viewthick,totalh))
+)
+
+magich=30
+lightshade=difference({lightshade,
+translate(topr,0,magich)*cone(bracketw/2,0,magich+2),
+translate(topr,0,0)*cube(topr,bracketw,magich+0.1)}
+)
+
+
+----------------------------------------------------
+
+emit(clamp_apart)
+
+--emit(clamp_together)
+--emit(lightshade)
+
