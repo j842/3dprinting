@@ -7,6 +7,7 @@ set_setting_value('gen_supports',true)
 set_setting_value('support_overhang_overlap_fraction',0.4)
 set_setting_value('support_algorithm','Wings')
 set_setting_value('infill_percentage_0',100)
+set_setting_value('extruder_temp_degree_c_0',241)
 
 -----------------------
 d1=6.3

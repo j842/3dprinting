@@ -13,7 +13,7 @@ package.path = package.path .. ";../common/?.lua"
 jshapes=require("jshapes")
 
 -- width of microsccope objective lens
-objectivew=24
+objectivew=25
 
 -- other parameters
 gap=0.1
